@@ -26,7 +26,7 @@
 
       <div class="space-y-3">
         <div>
-          <label class="text-xs text-slate-400">Login ID / Trade Code</label>
+          <label class="text-xs text-slate-400">Login Code (e.g. DG-01, BLR-01, MECH-02)</label>
           <input type="text" id="loginId" placeholder="Enter Code (with or without -)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 mt-1 text-sm focus:border-amber-400 focus:outline-none">
         </div>
         <div>
@@ -40,12 +40,12 @@
 
       <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-3 text-[11px] text-slate-400 space-y-1">
         <div class="font-bold text-slate-300"><i class="fa-solid fa-circle-info text-amber-400 mr-1"></i>Easy Login Tip:</div>
-        <p class="text-[11px] text-slate-400">Code small ya capital mein likhein, aur dash (<code class="text-amber-400">-</code>) lagayein ya na lagayein (jaise <code class="text-emerald-400">dg01</code> ya <code class="text-emerald-400">DG-01</code>), dono se login hoga.</p>
+        <p class="text-[11px] text-slate-400">Code small ya capital mein likhein, aur dash (<code class="text-amber-400">-</code>) lagayein ya na lagayein (jaise <code class="text-emerald-400">blr01</code> ya <code class="text-emerald-400">BLR-01</code>), dono se login hoga.</p>
       </div>
 
       <p id="loginStatus" class="text-xs text-center text-slate-400">Connecting to CGC Database...</p>
 
-      <!-- PERSONAL BRANDING FOOTER (LOGIN) -->
+      <!-- PERSONAL BRANDING FOOTER -->
       <div class="border-t border-slate-700/80 pt-3 text-center">
         <p class="text-[11px] text-slate-400">System Designed & Managed By</p>
         <p class="text-xs font-bold text-amber-400 tracking-wide mt-0.5">
@@ -105,7 +105,7 @@
     </header>
 
     <div class="max-w-5xl mx-auto p-4 space-y-4">
-      <!-- EXECUTIVE HOD SUMMARY STRIP -->
+      <!-- EXECUTIVE HOD SUMMARY STRIP (5 KPI CARDS) -->
       <div id="execSummaryBox" class="hidden bg-slate-800/70 border border-slate-700/90 rounded-2xl p-3.5 space-y-3">
         <div class="flex justify-between items-center">
           <span class="text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -116,62 +116,73 @@
           </button>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div onclick="switchTab('store')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-rose-500/40 rounded-xl p-3 transition">
-            <div class="flex justify-between items-center text-rose-400 text-xs font-semibold">
-              <span>Low Stock Items</span><i class="fa-solid fa-triangle-exclamation"></i>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+          <div onclick="switchTab('store')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-rose-500/40 rounded-xl p-2.5 transition">
+            <div class="flex justify-between items-center text-rose-400 text-[11px] font-semibold">
+              <span>Low Stock</span><i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            <div id="kpiLowStock" class="text-2xl font-extrabold text-rose-400 mt-1">0</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Tap to view store →</div>
+            <div id="kpiLowStock" class="text-xl font-extrabold text-rose-400 mt-1">0</div>
+            <div class="text-[10px] text-slate-400">Store items</div>
           </div>
 
-          <div onclick="switchTab('tools')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-amber-500/40 rounded-xl p-3 transition">
-            <div class="flex justify-between items-center text-amber-400 text-xs font-semibold">
-              <span>Tools Outside</span><i class="fa-solid fa-hammer"></i>
+          <div onclick="switchTab('tools')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-amber-500/40 rounded-xl p-2.5 transition">
+            <div class="flex justify-between items-center text-amber-400 text-[11px] font-semibold">
+              <span>Tools Out</span><i class="fa-solid fa-hammer"></i>
             </div>
-            <div id="kpiOutTools" class="text-2xl font-extrabold text-amber-400 mt-1">0</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Issued on campus →</div>
+            <div id="kpiOutTools" class="text-xl font-extrabold text-amber-400 mt-1">0</div>
+            <div class="text-[10px] text-slate-400">On campus</div>
           </div>
 
-          <div onclick="switchTab('pm')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-sky-500/40 rounded-xl p-3 transition">
-            <div class="flex justify-between items-center text-sky-400 text-xs font-semibold">
-              <span>PM Service Due</span><i class="fa-solid fa-wrench"></i>
+          <div onclick="switchTab('pm')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-sky-500/40 rounded-xl p-2.5 transition">
+            <div class="flex justify-between items-center text-sky-400 text-[11px] font-semibold">
+              <span>PM Due</span><i class="fa-solid fa-wrench"></i>
             </div>
-            <div id="kpiDuePM" class="text-2xl font-extrabold text-sky-400 mt-1">0</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Machines overdue →</div>
+            <div id="kpiDuePM" class="text-xl font-extrabold text-sky-400 mt-1">0</div>
+            <div class="text-[10px] text-slate-400">Machines due</div>
           </div>
 
-          <div onclick="switchTab('utility')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-emerald-500/40 rounded-xl p-3 transition">
-            <div class="flex justify-between items-center text-emerald-400 text-xs font-semibold">
-              <span>Main Tank Stock</span><i class="fa-solid fa-gas-pump"></i>
+          <div onclick="switchTab('dg')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-emerald-500/40 rounded-xl p-2.5 transition">
+            <div class="flex justify-between items-center text-emerald-400 text-[11px] font-semibold">
+              <span>DG Diesel</span><i class="fa-solid fa-gas-pump"></i>
             </div>
-            <div id="kpiDieselLtr" class="text-xl font-extrabold text-emerald-400 mt-1">0 Ltr</div>
-            <div id="kpiDieselCost" class="text-[10px] text-slate-300 font-semibold mt-0.5">Month Used: 0 L (₹0)</div>
+            <div id="kpiDieselLtr" class="text-lg font-extrabold text-emerald-400 mt-1">0 Ltr</div>
+            <div id="kpiDieselCost" class="text-[10px] text-slate-300 font-semibold">Used: 0 L</div>
+          </div>
+
+          <div onclick="switchTab('boiler')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-orange-500/40 rounded-xl p-2.5 transition col-span-2 sm:col-span-1">
+            <div class="flex justify-between items-center text-orange-400 text-[11px] font-semibold">
+              <span>Kitchen Gas</span><i class="fa-solid fa-fire-flame-simple"></i>
+            </div>
+            <div id="kpiGasCyl" class="text-lg font-extrabold text-orange-400 mt-1">0 Cyl</div>
+            <div class="text-[10px] text-slate-400">Steam Boiler</div>
           </div>
         </div>
       </div>
 
       <!-- DYNAMIC TRADE NAVIGATION TABS -->
       <div id="navTabBar" class="flex flex-wrap gap-1.5 bg-slate-800 p-1.5 rounded-xl mb-5 border border-slate-700">
-        <button onclick="switchTab('store')" id="tab-store" class="tab-btn flex-1 min-w-[70px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
+        <button onclick="switchTab('store')" id="tab-store" class="tab-btn flex-1 min-w-[65px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
           <i class="fa-solid fa-boxes-stacked block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>Store
         </button>
-        <button onclick="switchTab('tools')" id="tab-tools" class="tab-btn flex-1 min-w-[70px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
+        <button onclick="switchTab('tools')" id="tab-tools" class="tab-btn flex-1 min-w-[65px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
           <i class="fa-solid fa-hammer block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>Tools
         </button>
-        <button onclick="switchTab('pm')" id="tab-pm" class="tab-btn flex-1 min-w-[70px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
+        <button onclick="switchTab('dg')" id="tab-dg" class="tab-btn flex-1 min-w-[75px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
+          <i class="fa-solid fa-bolt block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>DG Sets
+        </button>
+        <button onclick="switchTab('boiler')" id="tab-boiler" class="tab-btn flex-1 min-w-[75px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
+          <i class="fa-solid fa-fire-flame-simple block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>Boiler
+        </button>
+        <button onclick="switchTab('pm')" id="tab-pm" class="tab-btn flex-1 min-w-[65px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
           <i class="fa-solid fa-qrcode block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>PM QR
         </button>
         <button onclick="switchTab('gatepass')" id="tab-gatepass" class="tab-btn flex-1 min-w-[75px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
           <i class="fa-solid fa-truck-ramp-box block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>GatePass
         </button>
-        <button onclick="switchTab('utility')" id="tab-utility" class="tab-btn flex-1 min-w-[75px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
-          <i class="fa-solid fa-gauge-high block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>DG/Boiler
-        </button>
-        <button onclick="switchTab('logs')" id="tab-logs" class="tab-btn flex-1 min-w-[65px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
+        <button onclick="switchTab('logs')" id="tab-logs" class="tab-btn flex-1 min-w-[60px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
           <i class="fa-solid fa-clock-rotate-left block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>Logs
         </button>
-        <button onclick="switchTab('admins')" id="tab-admins" class="tab-btn flex-1 min-w-[70px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
+        <button onclick="switchTab('admins')" id="tab-admins" class="tab-btn flex-1 min-w-[65px] text-slate-300 font-semibold py-2 rounded-lg text-[11px] sm:text-xs transition">
           <i class="fa-solid fa-users-gear block sm:inline mb-0.5 sm:mb-0 sm:mr-1"></i>Admins
         </button>
       </div>
@@ -207,50 +218,18 @@
         <div id="toolList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
 
-      <!-- 3. MACHINE QR PREVENTIVE MAINTENANCE (PM) -->
-      <div id="sec-pm" class="hidden space-y-4">
-        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
-          <div>
-            <h3 class="text-sm font-bold text-amber-400">Preventive Maintenance & Machine QR</h3>
-            <p class="text-xs text-slate-400">Scan machine QR to log servicing & track due dates</p>
-          </div>
-          <div class="flex gap-2">
-            <button onclick="shareOverduePMWhatsApp()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg text-xs font-bold">
-              <i class="fa-brands fa-whatsapp mr-1"></i> Due Alerts
-            </button>
-            <button onclick="openModal('addMachineModal')" class="admin-only bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold">
-              + Machine
-            </button>
-          </div>
-        </div>
-        <div id="pmList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-      </div>
-
-      <!-- 4. DIGITAL GATE PASS -->
-      <div id="sec-gatepass" class="hidden space-y-4">
-        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
-          <div>
-            <h3 class="text-sm font-bold text-amber-400">Outward Material & Scrap Gate Pass</h3>
-            <p class="text-xs text-slate-400">Returnable Repair (RGP) & Scrap Outward (NRGP)</p>
-          </div>
-          <button onclick="openModal('gpModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Gate Pass</button>
-        </div>
-        <div id="gpList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-      </div>
-
-      <!-- 5. DG / BOILER DAILY LOGBOOK + MAIN DIESEL TANK STOCK & LIVE RATE CARD -->
-      <div id="sec-utility" class="hidden space-y-4">
+      <!-- 3. DG SETS PORTAL (DIESEL ONLY) -->
+      <div id="sec-dg" class="hidden space-y-4">
         <div id="dieselTankCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-3 shadow-lg">
           <div class="flex flex-wrap justify-between items-start gap-2">
             <div class="flex items-center gap-2.5">
               <span class="bg-amber-500/20 text-amber-400 p-2.5 rounded-xl text-base"><i class="fa-solid fa-gas-pump"></i></span>
               <div>
-                <h3 class="text-sm sm:text-base font-bold text-slate-100">Main Diesel Tank Stock</h3>
+                <h3 class="text-sm sm:text-base font-bold text-slate-100">Main DG Diesel Tank Stock</h3>
                 <p id="tankUpdatedText" class="text-[11px] text-slate-400">Auto-deducts on DG entry</p>
               </div>
             </div>
 
-            <!-- LIVE DIESEL RATE DISPLAY + IN-APP EDIT BUTTON -->
             <div class="flex items-center gap-1.5">
               <button onclick="openEditRateModal()" title="Click to change Diesel Rate" class="bg-slate-900 hover:bg-slate-950 border border-amber-500/50 px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition shadow">
                 <span class="text-slate-400">Diesel Rate:</span>
@@ -284,15 +263,90 @@
 
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
           <div>
-            <h3 class="text-sm font-bold text-amber-400">DG Set, Boiler & HTP Running Log</h3>
-            <p class="text-xs text-slate-400">Auto-calculates Run Hours, Fuel Cost & Tank Stock</p>
+            <h3 class="text-sm font-bold text-amber-400">DG Sets Running Log (Diesel & HMR)</h3>
+            <p class="text-xs text-slate-400">Track DG-1, DG-2, DG-3 hours & diesel consumption</p>
           </div>
-          <button onclick="openNewUtilityModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Meter Entry</button>
+          <button onclick="openNewUtilityModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ DG Entry</button>
         </div>
         <div id="utilList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
 
-      <!-- 6. STORE LOGS -->
+      <!-- 4. BASE KITCHEN STEAM BOILER PORTAL (GAS CYLINDERS & STEAM PRESSURE) -->
+      <div id="sec-boiler" class="hidden space-y-4">
+        <div id="gasBankCard" class="bg-slate-800 border border-orange-500/40 rounded-2xl p-4 space-y-3 shadow-lg">
+          <div class="flex flex-wrap justify-between items-start gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="bg-orange-500/20 text-orange-400 p-2.5 rounded-xl text-base"><i class="fa-solid fa-fire-flame-simple"></i></span>
+              <div>
+                <h3 class="text-sm sm:text-base font-bold text-slate-100">Base Kitchen LPG Gas Bank Stock</h3>
+                <p id="gasUpdatedText" class="text-[11px] text-slate-400">Steam Cooking Boiler Fuel Supply</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button onclick="shareGasStockWhatsApp()" title="Share Gas Stock" class="bg-slate-700 hover:bg-slate-600 text-green-400 px-2.5 py-2 rounded-lg text-xs font-bold">
+                <i class="fa-brands fa-whatsapp"></i>
+              </button>
+              <button onclick="openModal('refillGasModal')" class="bg-orange-600 hover:bg-orange-500 text-white px-3 py-2 rounded-lg text-xs font-bold">
+                + Add Cylinders
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-end">
+            <div>
+              <span id="gasCurrentCyl" class="text-3xl font-extrabold text-orange-400">0</span>
+              <span id="gasCapacityText" class="text-xs text-slate-400 font-semibold">/ 24 Full Cylinders</span>
+            </div>
+            <span id="gasStatusBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400">GAS BANK OK</span>
+          </div>
+
+          <div class="w-full bg-slate-900 rounded-full h-3.5 overflow-hidden border border-slate-700">
+            <div id="gasProgressBar" class="bg-orange-500 h-full transition-all duration-500" style="width: 75%"></div>
+          </div>
+        </div>
+
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h3 class="text-sm font-bold text-orange-400">Base Kitchen Steam Boiler Log</h3>
+            <p class="text-xs text-slate-400">Track Cooking Shift, Steam Pressure (PSI) & Gas Cylinders Used</p>
+          </div>
+          <button onclick="openModal('boilerModal')" class="bg-orange-500 hover:bg-orange-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Boiler Log</button>
+        </div>
+        <div id="boilerList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+
+      <!-- 5. MACHINE QR PREVENTIVE MAINTENANCE (PM) -->
+      <div id="sec-pm" class="hidden space-y-4">
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h3 class="text-sm font-bold text-amber-400">Preventive Maintenance & Machine QR</h3>
+            <p class="text-xs text-slate-400">Scan machine QR to tick checklist & log servicing</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="shareOverduePMWhatsApp()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg text-xs font-bold">
+              <i class="fa-brands fa-whatsapp mr-1"></i> Due Alerts
+            </button>
+            <button onclick="openModal('addMachineModal')" class="admin-only bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold">
+              + Machine
+            </button>
+          </div>
+        </div>
+        <div id="pmList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+
+      <!-- 6. DIGITAL GATE PASS -->
+      <div id="sec-gatepass" class="hidden space-y-4">
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h3 class="text-sm font-bold text-amber-400">Outward Material & Scrap Gate Pass</h3>
+            <p class="text-xs text-slate-400">Returnable Repair (RGP) & Scrap Outward (NRGP)</p>
+          </div>
+          <button onclick="openModal('gpModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Gate Pass</button>
+        </div>
+        <div id="gpList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+
+      <!-- 7. STORE LOGS -->
       <div id="sec-logs" class="hidden space-y-4">
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
           <div class="flex justify-between items-center mb-3">
@@ -305,19 +359,34 @@
         </div>
       </div>
 
-      <!-- 7. ADMINS -->
-      <div id="sec-admins" class="hidden space-y-4">
-        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex justify-between items-center">
-          <div>
-            <h3 class="text-sm font-bold text-amber-400">Department Admins & Trade Staff</h3>
-            <p class="text-xs text-slate-400">Managed by Sandeep Singh (Welder) • Edit Trade, Role or PIN</p>
+      <!-- 8. ADMINS & DYNAMIC TRADE MANAGEMENT -->
+      <div id="sec-admins" class="hidden space-y-6">
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-3">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-sm font-bold text-sky-400"><i class="fa-solid fa-layer-group mr-1.5"></i>Department Trades & Code Prefixes</h3>
+              <p class="text-xs text-slate-400">Add or delete trades & control which portal tabs each trade sees</p>
+            </div>
+            <button id="addTradeBtn" onclick="openModal('addTradeModal')" class="bg-sky-600 hover:bg-sky-500 text-white px-3 py-2 rounded-lg text-xs font-bold hidden">
+              + Add Trade
+            </button>
           </div>
-          <button id="addAdminBtn" onclick="openAddAdminModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold hidden">+ Add Staff/Admin</button>
+          <div id="tradeList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5"></div>
         </div>
-        <div id="adminList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+
+        <div class="space-y-3">
+          <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex justify-between items-center">
+            <div>
+              <h3 class="text-sm font-bold text-amber-400">Department Admins & Trade Staff</h3>
+              <p class="text-xs text-slate-400">Managed by Sandeep Singh (Welder) • Edit Trade, Role or PIN</p>
+            </div>
+            <button id="addAdminBtn" onclick="openAddAdminModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold hidden">+ Add Staff/Admin</button>
+          </div>
+          <div id="adminList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </div>
       </div>
 
-      <!-- PERSONAL BRANDING FOOTER (MAIN PORTAL) -->
+      <!-- PERSONAL BRANDING FOOTER -->
       <footer class="pt-6 pb-2 text-center border-t border-slate-800/80">
         <p class="text-[11px] text-slate-500">
           CGC Maintenance ERP • Developed & Managed by <span class="text-amber-400 font-bold">Sandeep Singh (Welder)</span>
@@ -326,15 +395,159 @@
     </div>
   </div>
 
-  <!-- MODAL: UPDATE DIESEL PRICE (IN-APP) -->
+  <!-- MODAL: COMPLETE PM SERVICE (SMART CHECKBOX CHECKLIST) -->
+  <div id="completePmModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-4">
+      <div>
+        <span class="text-[10px] uppercase tracking-wider bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">QR Preventive Maintenance</span>
+        <h3 id="pmModalTitle" class="text-lg font-bold text-slate-100 mt-1">Machine Service Checklist</h3>
+        <p id="pmModalLoc" class="text-xs text-slate-400"></p>
+      </div>
+      <input type="hidden" id="pmMachineId">
+
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <label class="text-xs font-bold text-amber-400">Tick Completed Tasks (Bas Box Par Click Karein):</label>
+          <button type="button" onclick="selectAllPmTasks()" class="text-[11px] text-sky-400 hover:underline font-semibold">Select All</button>
+        </div>
+        <div id="pmChecklistContainer" class="space-y-2 bg-slate-900 p-3 rounded-xl border border-slate-700 max-h-48 overflow-y-auto"></div>
+      </div>
+
+      <div>
+        <label class="text-xs text-slate-400">Extra Remark (Optional - Zaroori nahi hai)</label>
+        <input type="text" id="pmExtraNote" placeholder="e.g. Belt replaced / All OK" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+
+      <div class="flex gap-2 pt-1">
+        <button onclick="closeModal('completePmModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold text-sm">Cancel</button>
+        <button onclick="submitCompletePM()" class="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-lg font-bold text-sm">
+          <i class="fa-solid fa-check-double mr-1"></i> Save Service
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD NEW MACHINE (PM) -->
+  <div id="addMachineModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-amber-400">Add Machine for QR PM</h3>
+      <input type="text" id="mchName" placeholder="Machine Name (e.g. Lift #2 / Cold Storage)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <input type="text" id="mchLoc" placeholder="Location (e.g. Block-4 Ground Floor)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div>
+        <label class="text-xs text-slate-400">Service Interval (Days)</label>
+        <input type="number" id="mchInterval" value="30" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <div>
+        <label class="text-xs text-slate-400">Checklist Points (Comma lagakar likhein taaki scan pe checkboxes banein)</label>
+        <input type="text" id="mchNotes" placeholder="e.g. Oil Check, Filter Clean, Belt Tension, Greasing" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('addMachineModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitNewMachine()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save & Gen QR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: + ADD NEW TRADE -->
+  <div id="addTradeModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-sky-400"><i class="fa-solid fa-layer-group mr-1.5"></i>Add New Department Trade</h3>
+      <div>
+        <label class="text-xs text-slate-400">Trade Name (e.g. AC / HVAC, RO Plant, Lift)</label>
+        <input type="text" id="newTradeName" placeholder="e.g. AC & Refrigeration" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <div>
+        <label class="text-xs text-slate-400">Login Code Prefix (e.g. HVAC-, RO-, LIFT-)</label>
+        <input type="text" id="newTradePrefix" placeholder="e.g. HVAC-" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm uppercase font-mono mt-1">
+      </div>
+      <div>
+        <label class="text-xs text-slate-400 block mb-1.5">Allowed Portal Tabs for this Trade:</label>
+        <div class="grid grid-cols-2 gap-2 text-xs bg-slate-900 p-3 rounded-lg border border-slate-700">
+          <label class="flex items-center gap-2"><input type="checkbox" class="trade-tab-cb" value="store" checked> Store Stock</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="trade-tab-cb" value="tools" checked> Tool Crib</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="trade-tab-cb" value="pm" checked> Machine QR PM</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="trade-tab-cb" value="dg"> DG Sets (Diesel)</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="trade-tab-cb" value="boiler"> Kitchen Boiler (Gas)</label>
+          <label class="flex items-center gap-2"><input type="checkbox" class="trade-tab-cb" value="gatepass"> Gate Pass</label>
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('addTradeModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold text-sm">Cancel</button>
+        <button onclick="submitNewTrade()" class="w-1/2 bg-sky-600 text-white py-2.5 rounded-lg font-bold text-sm">Save Trade</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BASE KITCHEN STEAM BOILER ENTRY -->
+  <div id="boilerModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-orange-400"><i class="fa-solid fa-fire-flame-simple mr-1.5"></i>Base Kitchen Steam Boiler Log</h3>
+      <select id="blrUnit" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <option value="Base Kitchen Steam Boiler #1">Base Kitchen Steam Boiler #1</option>
+        <option value="Base Kitchen Steam Boiler #2">Base Kitchen Steam Boiler #2</option>
+      </select>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[11px] text-slate-400">Cooking Shift</label>
+          <select id="blrShift" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+            <option value="Breakfast (5 AM - 9 AM)">Breakfast (5 AM - 9 AM)</option>
+            <option value="Lunch (10 AM - 2 PM)">Lunch (10 AM - 2 PM)</option>
+            <option value="Dinner (5 PM - 9 PM)">Dinner (5 PM - 9 PM)</option>
+            <option value="Full Day Run">Full Day Run</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[11px] text-slate-400">Steam Pressure (PSI)</label>
+          <input type="text" id="blrPsi" placeholder="e.g. 45 PSI" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[11px] text-slate-400">Gas Cylinders Used</label>
+          <input type="number" step="0.5" id="blrCylUsed" placeholder="e.g. 2" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+        </div>
+        <div>
+          <label class="text-[11px] text-slate-400">Water & Blowdown</label>
+          <select id="blrWater" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+            <option value="Water OK & Blowdown Done">Water OK & Blowdown Done</option>
+            <option value="Softener Regenerated">Softener Regenerated</option>
+            <option value="Low Water Check">Low Water Check</option>
+          </select>
+        </div>
+      </div>
+      <input type="text" id="blrRemarks" placeholder="Remarks" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('boilerModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitBoilerLog()" class="w-1/2 bg-orange-500 text-slate-900 py-2.5 rounded-lg font-bold">Save Boiler Log</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: + ADD GAS CYLINDERS -->
+  <div id="refillGasModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-sm w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-orange-400"><i class="fa-solid fa-fire-flame-simple mr-1.5"></i>Add LPG Gas Cylinders</h3>
+      <div>
+        <label class="text-xs text-slate-400">Full Cylinders Received (Nos)</label>
+        <input type="number" id="refillGasCyl" placeholder="e.g. 10" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <div>
+        <label class="text-xs text-slate-400">Agency Challan / Slip No</label>
+        <input type="text" id="refillGasChallan" placeholder="e.g. Indane #882" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('refillGasModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitGasRefill()" class="w-1/2 bg-orange-600 text-white py-2.5 rounded-lg font-bold">Add Cylinders</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: UPDATE DIESEL PRICE -->
   <div id="rateModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-xs w-full p-5 space-y-3">
       <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-indian-rupee-sign mr-1.5"></i>Update Diesel Rate</h3>
-      <p class="text-xs text-slate-400">Aaj ka diesel rate (₹ per Liter) dalein—poore portal mein cost isi rate se calculate hogi:</p>
-      <div>
-        <label class="text-xs text-slate-400">Diesel Price (₹ / Liter)</label>
-        <input type="number" step="0.01" id="newDieselRateInput" placeholder="e.g. 95.50" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-base font-bold text-amber-300 mt-1">
-      </div>
+      <p class="text-xs text-slate-400">Aaj ka diesel rate (₹ per Liter) dalein:</p>
+      <input type="number" step="0.01" id="newDieselRateInput" placeholder="e.g. 95.50" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-base font-bold text-amber-300">
       <div class="flex gap-2 pt-2">
         <button onclick="closeModal('rateModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold text-sm">Cancel</button>
         <button onclick="submitDieselRate()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold text-sm">Save Rate</button>
@@ -352,19 +565,19 @@
       <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
           <div class="font-bold text-emerald-400 text-sm mb-1">1. Easy Login</div>
-          <p>Apna Login Code small ya capital mein dalein (bina dash ke bhi chalega, jaise <code class="text-amber-300">dg01</code> ya <code class="text-amber-300">DG-01</code>) aur PIN daalkar login karein.</p>
+          <p>Apna Login Code small ya capital mein dalein (bina dash ke bhi chalega, jaise <code class="text-amber-300">dg01</code> ya <code class="text-amber-300">blr01</code>) aur PIN daalkar login karein.</p>
         </div>
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-amber-400 text-sm mb-1">2. Store Stock & Tool Crib</div>
-          <p>Samaan lene par <b>"- Issue"</b> aur tool lene par <b>"Issue Tool"</b> dabayein. Kaam khatam hone par tool ko <b>"Mark Returned"</b> karein.</p>
+          <div class="font-bold text-amber-400 text-sm mb-1">2. DG Sets Portal (Diesel & HMR)</div>
+          <p>Tank card par <b>"Diesel Rate"</b> click karke rate badal sakte hain aur <b>"+ DG Entry"</b> mein Start/Stop HMR aur diesel liters log kar sakte hain.</p>
         </div>
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-rose-400 text-sm mb-1">3. DG Room / Diesel Rate & Meter Entry</div>
-          <p>Tank card par <b>"Diesel Rate: ₹XX/L"</b> par click karke diesel ka price kabhi bhi badal sakte hain. <b>"+ Meter Entry"</b> mein reading dalte hi run hours, fuel cost (₹), aur remaining tank stock auto-update ho jayega.</p>
+          <div class="font-bold text-orange-400 text-sm mb-1">3. Base Kitchen Steam Boiler (LPG Gas)</div>
+          <p>Base kitchen ka steam boiler gas par chalta hai—iske liye alag <b>Boiler</b> tab hai jahan shift, steam pressure (PSI) aur gas cylinders ka stock track hota hai.</p>
         </div>
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-purple-400 text-sm mb-1">4. Machine QR & Gate Pass</div>
-          <p>Machine par lage QR code ko scan karke servicing log karein. Campus se bahar repair ke liye motor bhejne par <b>Gate Pass</b> banayein.</p>
+          <div class="font-bold text-sky-400 text-sm mb-1">4. Smart QR Checklist (No Typing!)</div>
+          <p>Machine par lage QR code ko scan karte hi uski checklist checkboxes ke sath khul jayegi—bas completed kaam par tick lagayein aur Save dabayein.</p>
         </div>
       </div>
       <button onclick="closeModal('helpGuideModal')" class="w-full bg-amber-500 text-slate-900 font-bold py-2.5 rounded-xl text-sm">Samajh Aa Gaya (Close)</button>
@@ -378,17 +591,7 @@
       <input type="hidden" id="editOldUserId">
       <div>
         <label class="text-xs text-slate-400">1. Select Trade / Department</label>
-        <select id="formUserDept" onchange="autoPrefixEmpCode()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
-          <option value="All">All Trades (Full ERP Access)</option>
-          <option value="DG_Boiler">DG Room / Boiler / HTP (DG-)</option>
-          <option value="Store">Store Department (STR-)</option>
-          <option value="Mechanical">Mechanical / Welding (MECH-)</option>
-          <option value="Electrical">Electrical Trade (ELEC-)</option>
-          <option value="Plumbing">Plumbing Trade (PLMB-)</option>
-          <option value="Carpentry">Carpentry Trade (CARP-)</option>
-          <option value="Mess">Mess Maintenance (MESS-)</option>
-          <option value="Gate">Security / Gate Pass Only (GATE-)</option>
-        </select>
+        <select id="formUserDept" onchange="autoPrefixEmpCode()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1"></select>
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div>
@@ -417,17 +620,16 @@
     </div>
   </div>
 
-  <!-- MODAL: ADD OR EDIT DG / BOILER METER ENTRY -->
+  <!-- MODAL: ADD OR EDIT DG METER ENTRY -->
   <div id="utilModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
-      <h3 id="utilModalTitle" class="text-lg font-bold text-amber-400">DG / Boiler Meter Entry</h3>
+      <h3 id="utilModalTitle" class="text-lg font-bold text-amber-400">DG Set Meter Entry</h3>
       <input type="hidden" id="editUtilLogId">
       <select id="utilEquip" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
         <option value="DG Set-1 (500 KVA)">DG Set-1 (500 KVA)</option>
         <option value="DG Set-2 (380 KVA)">DG Set-2 (380 KVA)</option>
         <option value="DG Set-3 (250 KVA)">DG Set-3 (250 KVA)</option>
-        <option value="Mess Steam Boiler">Mess Steam Boiler</option>
-        <option value="HTP / STP Plant">HTP / STP Plant</option>
+        <option value="HTP / STP Backup DG">HTP / STP Backup DG</option>
       </select>
       <div class="grid grid-cols-2 gap-2">
         <div>
@@ -470,27 +672,7 @@
     </div>
   </div>
 
-  <!-- OTHER MODALS -->
-  <div id="addMachineModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
-      <h3 class="text-lg font-bold text-amber-400">Add Machine for QR PM</h3>
-      <input type="text" id="mchName" placeholder="Machine Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <input type="text" id="mchLoc" placeholder="Location" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <div><label class="text-xs text-slate-400">Service Interval (Days)</label><input type="number" id="mchInterval" value="30" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1"></div>
-      <input type="text" id="mchNotes" placeholder="Service Checklist" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <div class="flex gap-2 pt-2"><button onclick="closeModal('addMachineModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitNewMachine()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save & Gen QR</button></div>
-    </div>
-  </div>
-
-  <div id="completePmModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
-      <h3 id="pmModalTitle" class="text-lg font-bold text-emerald-400">Log Preventive Maintenance</h3>
-      <input type="hidden" id="pmMachineId">
-      <textarea id="pmWorkNotes" rows="3" placeholder="Work Done / Parts Replaced" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm"></textarea>
-      <div class="flex gap-2 pt-2"><button onclick="closeModal('completePmModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitCompletePM()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Mark Service Done</button></div>
-    </div>
-  </div>
-
+  <!-- MODAL: PRINTABLE QR STICKER -->
   <div id="qrModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
     <div class="bg-white text-slate-900 rounded-2xl max-w-xs w-full p-6 text-center space-y-3 shadow-2xl" id="printableSticker">
       <div class="border-2 border-slate-900 rounded-xl p-4 space-y-2">
@@ -499,12 +681,16 @@
         <p id="qrMchLoc" class="text-xs font-semibold text-slate-600"></p>
         <img id="qrImg" src="" alt="Machine QR" class="w-44 h-44 mx-auto my-2 border p-1">
         <div id="qrMchId" class="font-mono text-xs font-bold text-slate-700"></div>
-        <p class="text-[10px] text-slate-500">Scan to View History & Log Servicing</p>
+        <p class="text-[10px] text-slate-500">Scan to Tick Checklist & Log Service</p>
       </div>
-      <div class="flex gap-2 pt-2 print:hidden"><button onclick="closeModal('qrModal')" class="w-1/2 bg-slate-200 text-slate-800 py-2 rounded-lg text-xs font-bold">Close</button><button onclick="window.print()" class="w-1/2 bg-slate-900 text-amber-400 py-2 rounded-lg text-xs font-bold">Print</button></div>
+      <div class="flex gap-2 pt-2 print:hidden">
+        <button onclick="closeModal('qrModal')" class="w-1/2 bg-slate-200 text-slate-800 py-2 rounded-lg text-xs font-bold">Close</button>
+        <button onclick="window.print()" class="w-1/2 bg-slate-900 text-amber-400 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-print mr-1"></i> Print</button>
+      </div>
     </div>
   </div>
 
+  <!-- OTHER MODALS (GATEPASS, STORE, TOOLS, PIN) -->
   <div id="gpModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
       <h3 class="text-lg font-bold text-amber-400">Generate Digital Gate Pass</h3>
@@ -589,46 +775,47 @@
       return String(str || "").replace(/[^A-Z0-9]/gi, '').toUpperCase();
     }
 
-    function autoPrefixEmpCode() {
-      if (document.getElementById('editOldUserId').value) return;
-      const dept = document.getElementById('formUserDept').value;
-      const prefixMap = { "All": "J-", "DG_Boiler": "DG-", "Store": "STR-", "Mechanical": "MECH-", "Electrical": "ELEC-", "Plumbing": "PLMB-", "Carpentry": "CARP-", "Mess": "MESS-", "Gate": "GATE-" };
-      const nextNum = String((appData.users ? appData.users.length : 1) + 1).padStart(2, '0');
-      document.getElementById('formUserId').value = (prefixMap[dept] || "J-") + nextNum;
-    }
-
     function getTradeRouting(user) {
       const id = user.id.toUpperCase();
-      const dept = (user.dept || "All").toLowerCase();
+      const dept = (user.dept || "All").trim();
 
-      if (user.role === "Super Admin" || (user.role === "Admin" && dept === "all")) {
-        return { label: "Master ERP Portal", allowedTabs: ['store', 'tools', 'pm', 'gatepass', 'utility', 'logs', 'admins'], defaultTab: 'store', storeFilter: null, showExecKPI: true };
+      if (user.role === "Super Admin" || (user.role === "Admin" && dept.toLowerCase() === "all")) {
+        return { label: "Master ERP Portal", allowedTabs: ['store', 'tools', 'dg', 'boiler', 'pm', 'gatepass', 'logs', 'admins'], defaultTab: 'store', storeFilter: null, showExecKPI: true };
       }
-      if (id.startsWith("DG-") || id.startsWith("BLR-") || dept.includes("dg") || dept.includes("boiler")) {
-        return { label: "DG & Boiler Portal", allowedTabs: ['utility', 'pm'], defaultTab: 'utility', storeFilter: null, showExecKPI: false };
+
+      const matchedTrade = (appData.trades || []).find(t =>
+        t.name.toLowerCase() === dept.toLowerCase() ||
+        (t.prefix && t.prefix !== "J-" && id.startsWith(t.prefix.toUpperCase()))
+      );
+
+      if (matchedTrade && matchedTrade.tabs && matchedTrade.tabs.length > 0) {
+        const filterTrades = ["Mechanical", "Electrical", "Plumbing", "Carpentry", "Mess"];
+        const matchedFilter = filterTrades.find(f => matchedTrade.name.toLowerCase().includes(f.toLowerCase())) || null;
+        return {
+          label: `${matchedTrade.name} Portal`,
+          allowedTabs: matchedTrade.tabs,
+          defaultTab: matchedTrade.tabs[0],
+          storeFilter: matchedFilter,
+          showExecKPI: false
+        };
       }
-      if (id.startsWith("STR-") || dept === "store" || user.role === "Store Incharge") {
-        return { label: "Store & Tool Crib Portal", allowedTabs: ['store', 'tools', 'gatepass', 'logs'], defaultTab: 'store', storeFilter: null, showExecKPI: false };
-      }
-      if (id.startsWith("GATE-") || dept === "gate") {
-        return { label: "Security Gate Pass Portal", allowedTabs: ['gatepass'], defaultTab: 'gatepass', storeFilter: null, showExecKPI: false };
-      }
-      if (id.startsWith("MECH-") || dept.includes("mech")) {
-        return { label: "Mechanical & Welding Portal", allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: "Mechanical", showExecKPI: false };
-      }
-      if (id.startsWith("ELEC-") || dept.includes("elec")) {
-        return { label: "Electrical Trade Portal", allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: "Electrical", showExecKPI: false };
-      }
-      if (id.startsWith("PLMB-") || dept.includes("plumb")) {
-        return { label: "Plumbing Trade Portal", allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: "Plumbing", showExecKPI: false };
-      }
-      if (id.startsWith("CARP-") || dept.includes("carp")) {
-        return { label: "Carpentry Trade Portal", allowedTabs: ['store', 'tools'], defaultTab: 'store', storeFilter: "Carpentry", showExecKPI: false };
-      }
-      if (id.startsWith("MESS-") || dept.includes("mess")) {
-        return { label: "Mess Maintenance Portal", allowedTabs: ['store', 'pm', 'utility'], defaultTab: 'pm', storeFilter: "Mess", showExecKPI: false };
-      }
-      return { label: `${user.dept} Portal`, allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: null, showExecKPI: false };
+
+      return { label: `${dept} Portal`, allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: null, showExecKPI: false };
+    }
+
+    function populateTradeDropdowns() {
+      const select = document.getElementById('formUserDept');
+      const trades = appData.trades && appData.trades.length > 0 ? appData.trades : [{ name: "All", prefix: "J-" }];
+      select.innerHTML = trades.map(t => `<option value="${t.name}">${t.name} (${t.prefix})</option>`).join('');
+    }
+
+    function autoPrefixEmpCode() {
+      if (document.getElementById('editOldUserId').value) return;
+      const selectedTrade = document.getElementById('formUserDept').value;
+      const found = (appData.trades || []).find(t => t.name === selectedTrade);
+      const pfx = found ? found.prefix : "J-";
+      const nextNum = String((appData.users ? appData.users.length : 1) + 1).padStart(2, '0');
+      document.getElementById('formUserId').value = pfx + nextNum;
     }
 
     (function setupPWA() {
@@ -645,7 +832,7 @@
       deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installAppBtn').classList.add('hidden');
     }
 
-    let appData = { users: [], inventory: [], tools: [], recentLogs: [], gatePasses: [], utilityLogs: [], fuelTank: { current: 0, capacity: 1000, minAlert: 200, rate: 95.50 }, machines: [] };
+    let appData = { users: [], trades: [], inventory: [], tools: [], recentLogs: [], gatePasses: [], utilityLogs: [], fuelTank: { current: 0, capacity: 1000, minAlert: 200, rate: 95.50 }, boilerLogs: [], gasBank: { current: 18, capacity: 24, minAlert: 6 }, machines: [] };
     let currentUser = null;
     let currentRouting = null;
 
@@ -679,7 +866,6 @@
 
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('mainApp').classList.remove('hidden');
-      // Display Name & Role cleanly (without showing Emp Code)
       document.getElementById('userBadge').innerText = user.name;
       document.getElementById('roleBadge').innerText = currentRouting.label;
       document.getElementById('tradePortalBadge').innerHTML = `<i class="fa-solid fa-layer-group mr-1"></i> ${currentRouting.label}`;
@@ -694,7 +880,7 @@
         filterBadge.classList.add('hidden');
       }
 
-      ['store', 'tools', 'pm', 'gatepass', 'utility', 'logs', 'admins'].forEach(t => {
+      ['store', 'tools', 'dg', 'boiler', 'pm', 'gatepass', 'logs', 'admins'].forEach(t => {
         document.getElementById('tab-' + t).classList.toggle('hidden', !currentRouting.allowedTabs.includes(t));
       });
 
@@ -702,6 +888,7 @@
       const isAdminLevel = ["Super Admin", "Admin", "Store Incharge"].includes(user.role);
 
       document.getElementById('addAdminBtn').classList.toggle('hidden', !isSuperAdmin);
+      document.getElementById('addTradeBtn').classList.toggle('hidden', !isSuperAdmin);
       document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdminLevel ? 'inline-block' : 'none');
 
       renderAll();
@@ -711,7 +898,7 @@
       if (scannedMch && currentRouting.allowedTabs.includes('pm')) {
         switchTab('pm');
         const m = appData.machines.find(x => x.id === scannedMch);
-        if (m) openCompletePmModal(m.id, m.name);
+        if (m) openCompletePmModal(m.id);
       } else {
         switchTab(currentRouting.defaultTab);
       }
@@ -745,6 +932,7 @@
       const outToolsCount = appData.tools.filter(t => t.status !== "Available").length;
       const duePmCount = (appData.machines || []).filter(m => m.nextDate <= todayStr).length;
       const tank = appData.fuelTank || { current: 0 };
+      const gas = appData.gasBank || { current: 0 };
 
       let monthUsed = 0;
       (appData.utilityLogs || []).forEach(u => {
@@ -752,13 +940,13 @@
           monthUsed += Number(u.diesel) || 0;
         }
       });
-      const monthCost = Math.round(monthUsed * rate);
 
       document.getElementById('kpiLowStock').innerText = lowStockCount;
       document.getElementById('kpiOutTools').innerText = outToolsCount;
       document.getElementById('kpiDuePM').innerText = duePmCount;
       document.getElementById('kpiDieselLtr').innerText = `${tank.current} Ltr`;
-      document.getElementById('kpiDieselCost').innerText = `${currentMonthShort}: ${monthUsed.toFixed(1)}L (₹${monthCost.toLocaleString('en-IN')})`;
+      document.getElementById('kpiDieselCost').innerText = `₹${rate}/L • Used: ${monthUsed.toFixed(0)}L`;
+      document.getElementById('kpiGasCyl').innerText = `${gas.current} Cyl`;
     }
 
     function shareHODBriefingWhatsApp() {
@@ -767,18 +955,18 @@
       const lowItems = appData.inventory.filter(i => i.stock <= i.min);
       const outTools = appData.tools.filter(t => t.status !== "Available");
       const duePMs = (appData.machines || []).filter(m => m.nextDate <= todayStr);
-      const openGPs = (appData.gatePasses || []).filter(g => g.status === "Out for Repair");
       const tank = appData.fuelTank || { current: 0, capacity: 1000 };
+      const gas = appData.gasBank || { current: 0, capacity: 24 };
       const rate = getDieselRate();
 
       const msg = `📊 *CGC MAINTENANCE DEPT - EXECUTIVE SUMMARY*\n` +
                   `📅 Date: ${today.toLocaleDateString('en-IN')}\n` +
                   `==============================\n` +
-                  `⛽ *Main Diesel Tank:* ${tank.current} / ${tank.capacity} Ltr (@ ₹${rate}/L)\n` +
+                  `⛽ *DG Diesel Tank:* ${tank.current} / ${tank.capacity} Ltr (@ ₹${rate}/L)\n` +
+                  `🔥 *Base Kitchen Gas Bank:* ${gas.current} / ${gas.capacity} Cylinders\n` +
                   `⚠️ *Low Stock Store Items:* ${lowItems.length} items\n` +
                   `🛠️ *Tools Issued Outside:* ${outTools.length} tools\n` +
                   `🔧 *PM Service Due:* ${duePMs.length} machines\n` +
-                  `🚚 *Open Gate Passes (RGP):* ${openGPs.length} pending\n` +
                   `==============================\n` +
                   `Managed By: *${BRAND_SIGNATURE}*`;
 
@@ -787,12 +975,12 @@
 
     function renderAll() {
       renderExecutiveSummary();
-      renderStore(); renderTools(); renderPM(); renderGatePasses(); renderUtilityLogs(); renderLogs(); renderAdmins();
+      renderStore(); renderTools(); renderUtilityLogs(); renderBoilerLogs(); renderPM(); renderGatePasses(); renderLogs(); renderTrades(); renderAdmins();
     }
 
     function switchTab(tab) {
       if (currentRouting && !currentRouting.allowedTabs.includes(tab)) return;
-      ['store', 'tools', 'pm', 'gatepass', 'utility', 'logs', 'admins'].forEach(t => {
+      ['store', 'tools', 'dg', 'boiler', 'pm', 'gatepass', 'logs', 'admins'].forEach(t => {
         document.getElementById('sec-' + t).classList.add('hidden');
         document.getElementById('tab-' + t).classList.remove('bg-amber-500', 'text-slate-900', 'font-bold');
         document.getElementById('tab-' + t).classList.add('text-slate-300', 'font-semibold');
@@ -803,7 +991,275 @@
       activeBtn.classList.add('bg-amber-500', 'text-slate-900', 'font-bold');
     }
 
-    // --- RENDER MAIN DIESEL TANK, LIVE RATE & UTILITY LOGS ---
+    // --- SMART QR PREVENTIVE MAINTENANCE (CHECKBOX CHECKLIST) ---
+    function renderPM() {
+      const container = document.getElementById('pmList');
+      const canDelete = ["Super Admin", "Admin"].includes(currentUser.role);
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      if (!appData.machines || appData.machines.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No machines added yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = appData.machines.map(m => {
+        const isOverdue = m.nextDate <= todayStr;
+        return `
+          <div class="bg-slate-800 p-4 rounded-xl border ${isOverdue ? 'border-rose-500' : 'border-slate-700'} space-y-2">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs text-amber-400 font-bold">${m.id}</span>
+                  <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded">${m.location}</span>
+                  ${canDelete ? `<button onclick="deleteMachine('${m.id}', '${m.name}')" class="text-slate-500 hover:text-rose-500 text-xs"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                </div>
+                <h4 class="font-bold text-base mt-1">${m.name}</h4>
+              </div>
+              <span class="text-[11px] px-2 py-0.5 rounded font-bold ${isOverdue ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}">${isOverdue ? 'SERVICE DUE' : 'OK'}</span>
+            </div>
+            <div class="bg-slate-900 p-2.5 rounded-lg text-xs space-y-1 text-slate-300">
+              <div class="flex justify-between"><span>Last Service: <b>${m.lastDate}</b></span><span>Next Due: <b class="${isOverdue ? 'text-rose-400' : 'text-amber-400'}">${m.nextDate}</b></span></div>
+              <div class="text-[11px] text-slate-400">Last Done: ${m.notes} (By: ${m.doneBy})</div>
+            </div>
+            <div class="flex gap-2 pt-1">
+              <button onclick="openQrSticker('${m.id}', '${m.name}', '${m.location}')" class="w-1/3 bg-slate-700 hover:bg-slate-600 text-amber-400 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-qrcode mr-1"></i> QR Sticker</button>
+              <button onclick="openCompletePmModal('${m.id}')" class="w-2/3 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-list-check mr-1"></i> Open Checklist</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function openCompletePmModal(machineId) {
+      const m = appData.machines.find(x => x.id === machineId);
+      if (!m) return;
+
+      document.getElementById('pmMachineId').value = m.id;
+      document.getElementById('pmModalTitle').innerText = m.name;
+      document.getElementById('pmModalLoc').innerText = `Location: ${m.location} • Last Done: ${m.lastDate}`;
+      document.getElementById('pmExtraNote').value = "";
+
+      const rawTasks = (m.notes || "General Inspection, Cleaning, Testing")
+        .replace(/✅/g, '')
+        .split(',')
+        .map(s => s.replace(/^Note:.*$/i, '').trim())
+        .filter(Boolean);
+
+      const boxContainer = document.getElementById('pmChecklistContainer');
+      boxContainer.innerHTML = rawTasks.map(task => `
+        <label class="flex items-center gap-3 bg-slate-800 hover:bg-slate-750 p-2.5 rounded-lg border border-slate-700 cursor-pointer">
+          <input type="checkbox" class="pm-task-cb w-4 h-4 accent-emerald-500" value="${task}">
+          <span class="text-xs font-semibold text-slate-200">${task}</span>
+        </label>
+      `).join('');
+
+      openModal('completePmModal');
+    }
+
+    function selectAllPmTasks() {
+      document.querySelectorAll('.pm-task-cb').forEach(cb => cb.checked = true);
+    }
+
+    async function submitCompletePM() {
+      const checked = Array.from(document.querySelectorAll('.pm-task-cb:checked')).map(cb => "✅ " + cb.value);
+      const extra = document.getElementById('pmExtraNote').value.trim();
+      if (checked.length === 0 && !extra) return alert("Kam se kam ek task par tick lagayein!");
+
+      const summary = [...checked, extra ? `Note: ${extra}` : ""].filter(Boolean).join(", ");
+
+      closeModal('completePmModal');
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          type: "COMPLETE_PM",
+          machineId: document.getElementById('pmMachineId').value,
+          completedTasks: summary,
+          doneBy: currentUser.name
+        })
+      });
+      window.history.replaceState({}, document.title, window.location.pathname);
+      loadData();
+    }
+
+    function openQrSticker(id, name, loc) {
+      const scanUrl = `${window.location.href.split('?')[0]}?machine=${id}`;
+      document.getElementById('qrMchName').innerText = name; document.getElementById('qrMchLoc').innerText = loc; document.getElementById('qrMchId').innerText = `ID: ${id}`;
+      document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(scanUrl)}`;
+      openModal('qrModal');
+    }
+
+    async function submitNewMachine() {
+      const name = document.getElementById('mchName').value.trim(); if (!name) return alert("Enter machine name!");
+      closeModal('addMachineModal'); document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_MACHINE", name, location: document.getElementById('mchLoc').value || "Campus", interval: document.getElementById('mchInterval').value || 30, notes: document.getElementById('mchNotes').value || "General Check, Cleaning, Greasing", doneBy: currentUser.name }) });
+      loadData();
+    }
+
+    async function deleteMachine(id, name) {
+      if (!confirm(`Delete "${name}" from PM list?`)) return;
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_MACHINE", machineId: id }) });
+      loadData();
+    }
+
+    function shareOverduePMWhatsApp() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      const due = appData.machines.filter(m => m.nextDate <= todayStr);
+      if (due.length === 0) return alert("All machines servicing is up to date!");
+      let text = `🔧 *CGC PREVENTIVE MAINTENANCE - DUE LIST*\n--------------------------\n`;
+      due.forEach((m, idx) => text += `${idx + 1}. *${m.name}* (${m.location})\n   Due Date: ${m.nextDate}\n`);
+      text += `--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // --- RENDER DYNAMIC TRADES ---
+    function renderTrades() {
+      const isSuperAdmin = currentUser.role === "Super Admin";
+      const container = document.getElementById('tradeList');
+      container.innerHTML = (appData.trades || []).map(t => `
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex justify-between items-start gap-2">
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-bold text-xs text-slate-100">${t.name}</span>
+              <span class="text-[10px] font-mono bg-sky-500/20 text-sky-300 px-1.5 py-0.5 rounded">${t.prefix}</span>
+            </div>
+            <div class="text-[10px] text-slate-400 mt-1 uppercase">Portals: ${t.tabs.join(', ')}</div>
+          </div>
+          ${(isSuperAdmin && t.name !== "All") ? `
+            <button onclick="deleteTrade('${t.name}')" title="Delete Trade" class="text-slate-500 hover:text-rose-500 text-xs p-1">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function submitNewTrade() {
+      const name = document.getElementById('newTradeName').value.trim();
+      const prefix = document.getElementById('newTradePrefix').value.trim().toUpperCase();
+      const selectedTabs = Array.from(document.querySelectorAll('.trade-tab-cb:checked')).map(cb => cb.value);
+      if (!name || !prefix || selectedTabs.length === 0) return alert("Trade Name, Prefix, aur kam se kam 1 Portal select karein!");
+
+      closeModal('addTradeModal'); document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_TRADE", name, prefix, tabs: selectedTabs.join(',') }) });
+      const result = await res.json();
+      if (result.status === "error") alert(result.message);
+      document.getElementById('newTradeName').value = ""; document.getElementById('newTradePrefix').value = "";
+      loadData();
+    }
+
+    async function deleteTrade(name) {
+      if (!confirm(`Delete trade "${name}"?`)) return;
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_TRADE", name }) });
+      loadData();
+    }
+
+    // --- RENDER BASE KITCHEN STEAM BOILER ---
+    function renderBoilerLogs() {
+      const gas = appData.gasBank || { current: 0, capacity: 24, minAlert: 6, updated: "-" };
+      const isLow = gas.current <= gas.minAlert;
+      const pct = Math.min(100, Math.max(0, Math.round((gas.current / (gas.capacity || 24)) * 100)));
+
+      document.getElementById('gasCurrentCyl').innerText = gas.current;
+      document.getElementById('gasCurrentCyl').className = `text-3xl font-extrabold ${isLow ? 'text-rose-400' : 'text-orange-400'}`;
+      document.getElementById('gasCapacityText').innerText = `/ ${gas.capacity} Full Cylinders (${pct}%)`;
+      document.getElementById('gasUpdatedText').innerText = `Updated: ${gas.updated} • Min Reserve: ${gas.minAlert} Cyl`;
+
+      const badge = document.getElementById('gasStatusBadge');
+      const bar = document.getElementById('gasProgressBar');
+      if (isLow) {
+        badge.innerText = "⚠️ LOW LPG GAS ALERT";
+        badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-rose-500/20 text-rose-400";
+        bar.className = "bg-rose-500 h-full transition-all duration-500";
+      } else {
+        badge.innerText = "GAS BANK OK";
+        badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400";
+        bar.className = "bg-orange-500 h-full transition-all duration-500";
+      }
+      bar.style.width = pct + "%";
+
+      const container = document.getElementById('boilerList');
+      if (!appData.boilerLogs || appData.boilerLogs.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No Steam Boiler entries logged yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = appData.boilerLogs.map(b => {
+        const isRefill = String(b.cylUsed).startsWith('+');
+        if (isRefill) {
+          return `
+            <div class="bg-orange-950/30 p-4 rounded-xl border border-orange-500/40 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-orange-400 text-sm"><i class="fa-solid fa-circle-plus mr-1"></i>${b.unit}</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] text-slate-400">${b.time}</span>
+                  <button onclick="deleteBoilerLog('${b.id}')" class="text-slate-400 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+              </div>
+              <div class="text-lg font-extrabold text-orange-300">${b.cylUsed} Full Cylinders Added</div>
+              <div class="text-[11px] text-slate-400">${b.remarks} • By: ${b.operator}</div>
+            </div>`;
+        }
+        return `
+          <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-orange-400 text-sm"><i class="fa-solid fa-fire-flame-simple mr-1"></i>${b.unit}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] text-slate-400">${b.time}</span>
+                <button onclick="deleteBoilerLog('${b.id}')" class="text-rose-400 hover:text-rose-300 text-xs px-1"><i class="fa-solid fa-trash-can"></i></button>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-lg text-center">
+              <div><span class="text-[10px] text-slate-400 block">Steam PSI</span><b class="text-sm text-sky-400">${b.psi}</b></div>
+              <div><span class="text-[10px] text-slate-400 block">Gas Used</span><b class="text-sm text-rose-400">-${b.cylUsed} Cyl</b></div>
+              <div><span class="text-[10px] text-slate-400 block">Shift</span><b class="text-xs text-emerald-400">${b.shift.split(' ')[0]}</b></div>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-400">
+              <span>${b.waterOk} • Op: ${b.operator}</span>
+              <button onclick="shareBoilerWhatsApp('${b.id}')" class="text-green-400 hover:text-green-300 font-bold"><i class="fa-brands fa-whatsapp"></i> Share</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function submitBoilerLog() {
+      closeModal('boilerModal'); document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_BOILER_LOG", unit: document.getElementById('blrUnit').value, shift: document.getElementById('blrShift').value, psi: document.getElementById('blrPsi').value || "45 PSI", cylUsed: document.getElementById('blrCylUsed').value || 0, waterOk: document.getElementById('blrWater').value, operator: currentUser.name, remarks: document.getElementById('blrRemarks').value }) });
+      const result = await res.json();
+      await loadData();
+      if (result.lowGas && confirm(`⚠️ LOW GAS BANK ALERT! Base kitchen mein sirf ${result.remainingCyl} cylinders bache hain. WhatsApp alert bhejna hai?`)) shareGasStockWhatsApp();
+    }
+
+    async function submitGasRefill() {
+      const cylinders = document.getElementById('refillGasCyl').value;
+      if (!cylinders || Number(cylinders) <= 0) return alert("Valid cylinders dalein!");
+      closeModal('refillGasModal'); document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "REFILL_GAS_BANK", cylinders, challan: document.getElementById('refillGasChallan').value, operator: currentUser.name }) });
+      document.getElementById('refillGasCyl').value = "";
+      loadData();
+    }
+
+    async function deleteBoilerLog(logId) {
+      if (!confirm("Delete this Boiler entry?")) return;
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_BOILER_LOG", logId }) });
+      loadData();
+    }
+
+    function shareGasStockWhatsApp() {
+      const gas = appData.gasBank || { current: 0, capacity: 24 };
+      const msg = `🔥 *CGC BASE KITCHEN - LPG GAS BANK REPORT*\n--------------------------\n🛢️ *Full Cylinders Available:* ${gas.current} / ${gas.capacity} Cyl\n📅 *Updated:* ${gas.updated}\n👷 *Reported By:* ${currentUser.name}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function shareBoilerWhatsApp(logId) {
+      const b = appData.boilerLogs.find(x => x.id === logId); if (!b) return;
+      const msg = `🔥 *CGC BASE KITCHEN STEAM BOILER LOG*\n📅 ${b.time}\n⏰ Shift: ${b.shift}\n gauge Pressure: *${b.psi}* | Gas Used: *${b.cylUsed} Cyl*\n💧 Check: ${b.waterOk} | Op: ${b.operator}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // --- RENDER MAIN DIESEL TANK & DG LOGS ---
     function renderUtilityLogs() {
       const tank = appData.fuelTank || { current: 0, capacity: 1000, minAlert: 200, updated: "-", rate: 95.50 };
       const rate = getDieselRate();
@@ -837,7 +1293,7 @@
 
       const container = document.getElementById('utilList');
       if (!appData.utilityLogs || appData.utilityLogs.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No DG/Boiler readings logged yet.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No DG Set readings logged yet.</p>`;
         return;
       }
 
@@ -852,7 +1308,7 @@
                 <span class="font-bold text-emerald-400 text-sm"><i class="fa-solid fa-circle-plus mr-1"></i>${u.equip}</span>
                 <div class="flex items-center gap-2">
                   <span class="text-[11px] text-slate-400">${u.time}</span>
-                  <button onclick="deleteUtilityLog('${u.id}')" title="Delete Refill Entry" class="text-slate-400 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                  <button onclick="deleteUtilityLog('${u.id}')" class="text-slate-400 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
               </div>
               <div class="text-lg font-extrabold text-emerald-300">${u.diesel} Liters <span class="text-xs font-mono text-emerald-400/80">(~₹${refillCost.toLocaleString('en-IN')})</span></div>
@@ -866,8 +1322,8 @@
               <span class="font-bold text-amber-400 text-sm"><i class="fa-solid fa-bolt mr-1"></i>${u.equip}</span>
               <div class="flex items-center gap-2">
                 <span class="text-[11px] text-slate-400">${u.time}</span>
-                <button onclick="openEditUtilityModal('${u.id}')" title="Edit Entry" class="text-sky-400 hover:text-sky-300 text-xs px-1"><i class="fa-solid fa-pen-to-square"></i></button>
-                <button onclick="deleteUtilityLog('${u.id}')" title="Delete Entry" class="text-rose-400 hover:text-rose-300 text-xs px-1"><i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="openEditUtilityModal('${u.id}')" class="text-sky-400 hover:text-sky-300 text-xs px-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button onclick="deleteUtilityLog('${u.id}')" class="text-rose-400 hover:text-rose-300 text-xs px-1"><i class="fa-solid fa-trash-can"></i></button>
               </div>
             </div>
             <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-lg text-center">
@@ -883,43 +1339,28 @@
       }).join('');
     }
 
-    function openEditRateModal() {
-      document.getElementById('newDieselRateInput').value = getDieselRate();
-      openModal('rateModal');
-    }
+    function openEditRateModal() { document.getElementById('newDieselRateInput').value = getDieselRate(); openModal('rateModal'); }
 
     async function submitDieselRate() {
       const rate = document.getElementById('newDieselRateInput').value;
       if (!rate || Number(rate) <= 0) return alert("Valid diesel rate dalein!");
-      closeModal('rateModal');
-      document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ type: "UPDATE_DIESEL_RATE", rate: Number(rate) })
-      });
+      closeModal('rateModal'); document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "UPDATE_DIESEL_RATE", rate: Number(rate) }) });
       loadData();
     }
 
     function openNewUtilityModal() {
       document.getElementById('editUtilLogId').value = "";
-      document.getElementById('utilModalTitle').innerText = "New DG / Boiler Meter Entry";
-      document.getElementById('utilStart').value = "";
-      document.getElementById('utilStop').value = "";
-      document.getElementById('utilDiesel').value = "";
-      document.getElementById('utilRemarks').value = "";
+      document.getElementById('utilModalTitle').innerText = "New DG Set Meter Entry";
+      document.getElementById('utilStart').value = ""; document.getElementById('utilStop').value = ""; document.getElementById('utilDiesel').value = ""; document.getElementById('utilRemarks').value = "";
       openModal('utilModal');
     }
 
     function openEditUtilityModal(logId) {
-      const u = appData.utilityLogs.find(x => x.id === logId);
-      if (!u) return;
+      const u = appData.utilityLogs.find(x => x.id === logId); if (!u) return;
       document.getElementById('editUtilLogId').value = u.id;
       document.getElementById('utilModalTitle').innerText = "Edit Meter Entry (" + u.id + ")";
-      document.getElementById('utilEquip').value = u.equip;
-      document.getElementById('utilStart').value = u.start;
-      document.getElementById('utilStop').value = u.stop;
-      document.getElementById('utilDiesel').value = u.diesel;
-      document.getElementById('utilRemarks').value = u.remarks === "-" ? "" : u.remarks;
+      document.getElementById('utilEquip').value = u.equip; document.getElementById('utilStart').value = u.start; document.getElementById('utilStop').value = u.stop; document.getElementById('utilDiesel').value = u.diesel; document.getElementById('utilRemarks').value = u.remarks === "-" ? "" : u.remarks;
       openModal('utilModal');
     }
 
@@ -928,27 +1369,14 @@
       const start = document.getElementById('utilStart').value, stop = document.getElementById('utilStop').value;
       if (!start || !stop) return alert("Enter Start & Stop readings!");
       closeModal('utilModal'); document.getElementById('loader').classList.remove('hidden');
-
-      const payload = {
-        type: editId ? "EDIT_UTILITY_LOG" : "ADD_UTILITY_LOG",
-        logId: editId,
-        equip: document.getElementById('utilEquip').value,
-        start, stop,
-        diesel: document.getElementById('utilDiesel').value || 0,
-        operator: currentUser.name,
-        remarks: document.getElementById('utilRemarks').value
-      };
-
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: editId ? "EDIT_UTILITY_LOG" : "ADD_UTILITY_LOG", logId: editId, equip: document.getElementById('utilEquip').value, start, stop, diesel: document.getElementById('utilDiesel').value || 0, operator: currentUser.name, remarks: document.getElementById('utilRemarks').value }) });
       const result = await res.json();
       await loadData();
-      if (!editId && result.lowFuel && confirm(`⚠️ LOW DIESEL ALERT! Tank mein sirf ${result.remainingTank} Ltr bacha hai. WhatsApp alert bhejna hai?`)) {
-        shareFuelStockWhatsApp();
-      }
+      if (!editId && result.lowFuel && confirm(`⚠️ LOW DIESEL ALERT! Tank mein sirf ${result.remainingTank} Ltr bacha hai. WhatsApp alert bhejna hai?`)) shareFuelStockWhatsApp();
     }
 
     async function deleteUtilityLog(logId) {
-      if (!confirm("Kya aap is meter entry ko delete karna chahte hain? (Diesel tank stock automatically adjust ho jayega)")) return;
+      if (!confirm("Delete this DG entry? (Diesel tank stock auto-adjust ho jayega)")) return;
       document.getElementById('loader').classList.remove('hidden');
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_UTILITY_LOG", logId }) });
       loadData();
@@ -976,7 +1404,7 @@
       const u = appData.utilityLogs.find(x => x.id === logId); if (!u) return;
       const rate = getDieselRate();
       const cost = Math.round((Number(u.diesel) || 0) * rate);
-      const msg = `⚡ *CGC UTILITY LOG - ${u.equip.toUpperCase()}*\n📅 ${u.time}\n⏱️ HMR: ${u.start} → ${u.stop} (*${u.hours} Hrs*)\n⛽ Fuel: *${u.diesel} Ltr* (~₹${cost} @ ₹${rate}/L)\n📊 Avg: ${u.avg} L/Hr | Op: ${u.operator}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
+      const msg = `⚡ *CGC DG LOG - ${u.equip.toUpperCase()}*\n📅 ${u.time}\n⏱️ HMR: ${u.start} → ${u.stop} (*${u.hours} Hrs*)\n⛽ Fuel: *${u.diesel} Ltr* (~₹${cost} @ ₹${rate}/L)\n📊 Avg: ${u.avg} L/Hr | Op: ${u.operator}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
@@ -1006,9 +1434,9 @@
     }
 
     function openAddAdminModal() {
+      populateTradeDropdowns();
       document.getElementById('editOldUserId').value = "";
       document.getElementById('userFormTitle').innerText = "Add Trade Staff / Incharge";
-      document.getElementById('formUserDept').value = "All";
       document.getElementById('formUserRole').value = "Operator";
       document.getElementById('formUserName').value = "";
       document.getElementById('formUserPhone').value = "";
@@ -1019,8 +1447,8 @@
     }
 
     function openEditAdminModal(userId) {
-      const u = appData.users.find(x => x.id === userId);
-      if (!u) return;
+      populateTradeDropdowns();
+      const u = appData.users.find(x => x.id === userId); if (!u) return;
       document.getElementById('editOldUserId').value = u.id;
       document.getElementById('userFormTitle').innerText = "Edit Staff Details (" + u.name + ")";
       document.getElementById('formUserDept').value = u.dept || "All";
@@ -1040,31 +1468,14 @@
       const pin = document.getElementById('formUserPin').value.trim();
       if (!userId || !name || !pin) return alert("Code, Name, and PIN required!");
 
-      closeModal('userFormModal');
-      document.getElementById('loader').classList.remove('hidden');
-
-      const payload = {
-        type: oldUserId ? "EDIT_USER" : "ADD_USER",
-        oldUserId,
-        userId,
-        name,
-        role: document.getElementById('formUserRole').value,
-        dept: document.getElementById('formUserDept').value,
-        phone: document.getElementById('formUserPhone').value.trim(),
-        pin
-      };
-
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      closeModal('userFormModal'); document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ type: oldUserId ? "EDIT_USER" : "ADD_USER", oldUserId, userId, name, role: document.getElementById('formUserRole').value, dept: document.getElementById('formUserDept').value, phone: document.getElementById('formUserPhone').value.trim(), pin })
+      });
       const result = await res.json();
-      if (result.status === "error") {
-        alert(result.message);
-        document.getElementById('loader').classList.add('hidden');
-      } else {
-        await loadData();
-        if (!oldUserId && confirm(`Created! Send Login Code & PIN on WhatsApp?`)) {
-          sendAdminCredentialsWhatsApp(userId);
-        }
-      }
+      if (result.status === "error") { alert(result.message); document.getElementById('loader').classList.add('hidden'); }
+      else { await loadData(); if (!oldUserId && confirm(`Created! Send Login Code & PIN on WhatsApp?`)) sendAdminCredentialsWhatsApp(userId); }
     }
 
     async function deleteAdmin(userId, name) {
@@ -1074,7 +1485,7 @@
       loadData();
     }
 
-    // --- OTHER EXISTING FUNCTIONS ---
+    // --- STORE, TOOLS, GATEPASS & PIN ---
     function renderStore() {
       const q = document.getElementById('searchStore').value.toLowerCase();
       const canDelete = ["Super Admin", "Admin", "Store Incharge"].includes(currentUser.role);
@@ -1136,83 +1547,6 @@
               ` : `<button onclick="openToolModal('${tool.id}', '${tool.name}')" class="w-full mt-3 bg-amber-500 hover:bg-amber-400 text-slate-900 py-2 rounded-lg text-xs font-bold">Issue Tool</button>`}
             </div>`;
         }).join('');
-    }
-
-    function renderPM() {
-      const container = document.getElementById('pmList');
-      const canDelete = ["Super Admin", "Admin"].includes(currentUser.role);
-      const todayStr = new Date().toISOString().split('T')[0];
-
-      if (!appData.machines || appData.machines.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No machines added yet.</p>`;
-        return;
-      }
-
-      container.innerHTML = appData.machines.map(m => {
-        const isOverdue = m.nextDate <= todayStr;
-        return `
-          <div class="bg-slate-800 p-4 rounded-xl border ${isOverdue ? 'border-rose-500' : 'border-slate-700'} space-y-2">
-            <div class="flex justify-between items-start">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="font-mono text-xs text-amber-400 font-bold">${m.id}</span>
-                  <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded">${m.location}</span>
-                  ${canDelete ? `<button onclick="deleteMachine('${m.id}', '${m.name}')" class="text-slate-500 hover:text-rose-500 text-xs"><i class="fa-solid fa-trash-can"></i></button>` : ''}
-                </div>
-                <h4 class="font-bold text-base mt-1">${m.name}</h4>
-              </div>
-              <span class="text-[11px] px-2 py-0.5 rounded font-bold ${isOverdue ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}">${isOverdue ? 'SERVICE DUE' : 'OK'}</span>
-            </div>
-            <div class="bg-slate-900 p-2.5 rounded-lg text-xs space-y-1 text-slate-300">
-              <div class="flex justify-between"><span>Last Service: <b>${m.lastDate}</b></span><span>Next Due: <b class="${isOverdue ? 'text-rose-400' : 'text-amber-400'}">${m.nextDate}</b></span></div>
-              <div class="text-[11px] text-slate-400">Checklist: ${m.notes} (By: ${m.doneBy})</div>
-            </div>
-            <div class="flex gap-2 pt-1">
-              <button onclick="openQrSticker('${m.id}', '${m.name}', '${m.location}')" class="w-1/3 bg-slate-700 hover:bg-slate-600 text-amber-400 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-qrcode mr-1"></i> QR Sticker</button>
-              <button onclick="openCompletePmModal('${m.id}', '${m.name}')" class="w-2/3 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-check-double mr-1"></i> Log Service Done</button>
-            </div>
-          </div>`;
-      }).join('');
-    }
-
-    function openQrSticker(id, name, loc) {
-      const scanUrl = `${window.location.href.split('?')[0]}?machine=${id}`;
-      document.getElementById('qrMchName').innerText = name; document.getElementById('qrMchLoc').innerText = loc; document.getElementById('qrMchId').innerText = `ID: ${id}`;
-      document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(scanUrl)}`;
-      openModal('qrModal');
-    }
-
-    function openCompletePmModal(id, name) { document.getElementById('pmMachineId').value = id; document.getElementById('pmModalTitle').innerText = "Service Log: " + name; openModal('completePmModal'); }
-
-    async function submitNewMachine() {
-      const name = document.getElementById('mchName').value.trim(); if (!name) return alert("Enter machine name!");
-      closeModal('addMachineModal'); document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_MACHINE", name, location: document.getElementById('mchLoc').value || "Campus", interval: document.getElementById('mchInterval').value || 30, notes: document.getElementById('mchNotes').value, doneBy: currentUser.name }) });
-      loadData();
-    }
-
-    async function submitCompletePM() {
-      closeModal('completePmModal'); document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "COMPLETE_PM", machineId: document.getElementById('pmMachineId').value, notes: document.getElementById('pmWorkNotes').value || "Routine Servicing Completed", doneBy: currentUser.name }) });
-      window.history.replaceState({}, document.title, window.location.pathname);
-      loadData();
-    }
-
-    async function deleteMachine(id, name) {
-      if (!confirm(`Delete "${name}" from PM list?`)) return;
-      document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_MACHINE", machineId: id }) });
-      loadData();
-    }
-
-    function shareOverduePMWhatsApp() {
-      const todayStr = new Date().toISOString().split('T')[0];
-      const due = appData.machines.filter(m => m.nextDate <= todayStr);
-      if (due.length === 0) return alert("All machines servicing is up to date!");
-      let text = `🔧 *CGC PREVENTIVE MAINTENANCE - DUE LIST*\n--------------------------\n`;
-      due.forEach((m, idx) => text += `${idx + 1}. *${m.name}* (${m.location})\n   Due Date: ${m.nextDate} | Task: ${m.notes}\n`);
-      text += `--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     function renderGatePasses() {
