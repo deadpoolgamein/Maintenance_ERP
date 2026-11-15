@@ -26,8 +26,8 @@
 
       <div class="space-y-3">
         <div>
-          <label class="text-xs text-slate-400">Employee Code (e.g. J-5383, DG-01, MECH-05)</label>
-          <input type="text" id="loginId" placeholder="Enter Trade Code" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 mt-1 text-sm uppercase focus:border-amber-400 focus:outline-none">
+          <label class="text-xs text-slate-400">Employee Code (e.g. j5383, DG-01, mech05)</label>
+          <input type="text" id="loginId" placeholder="Enter Code (with or without -)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 mt-1 text-sm focus:border-amber-400 focus:outline-none">
         </div>
         <div>
           <label class="text-xs text-slate-400">Security PIN</label>
@@ -39,15 +39,8 @@
       </div>
 
       <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-3 text-[11px] text-slate-400 space-y-1">
-        <div class="font-bold text-slate-300"><i class="fa-solid fa-id-badge text-amber-400 mr-1"></i>CGC Trade Code Prefixes:</div>
-        <div class="grid grid-cols-2 gap-1 font-mono text-[10px]">
-          <span>• DG-XX : DG/Boiler</span>
-          <span>• MECH-XX : Welding/Mech</span>
-          <span>• ELEC-XX : Electrical</span>
-          <span>• PLMB-XX : Plumbing</span>
-          <span>• STR-XX : Store</span>
-          <span>• GATE-XX : Gate Pass</span>
-        </div>
+        <div class="font-bold text-slate-300"><i class="fa-solid fa-circle-info text-amber-400 mr-1"></i>Easy Login Tip:</div>
+        <p class="text-[11px] text-slate-400">Code small ya capital mein likhein, aur dash (<code class="text-amber-400">-</code>) lagayein ya na lagayein (jaise <code class="text-emerald-400">dg01</code> ya <code class="text-emerald-400">DG-01</code>), dono se login hoga.</p>
       </div>
 
       <p id="loginStatus" class="text-xs text-center text-slate-400">Connecting to CGC Database...</p>
@@ -66,8 +59,11 @@
           </p>
         </div>
         <div class="flex items-center gap-1.5">
+          <button onclick="openModal('helpGuideModal')" class="bg-sky-600/25 hover:bg-sky-600 text-sky-300 hover:text-white border border-sky-500/40 px-2.5 py-1.5 rounded-lg text-xs font-bold">
+            <i class="fa-solid fa-circle-question mr-1"></i>Guide
+          </button>
           <button id="installAppBtn" onclick="installPWA()" class="hidden bg-amber-500 text-slate-900 px-2.5 py-1.5 rounded-lg text-xs font-bold">
-            <i class="fa-solid fa-download mr-1"></i> App
+            <i class="fa-solid fa-download"></i>
           </button>
           <button onclick="openModal('pinModal')" title="Change PIN" class="bg-slate-700 hover:bg-slate-600 px-2.5 py-1.5 rounded-lg text-xs font-semibold">
             <i class="fa-solid fa-key text-amber-400"></i>
@@ -266,7 +262,6 @@
             <span id="tankStatusBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400">LEVEL OK</span>
           </div>
 
-          <!-- Visual Tank Progress Bar -->
           <div class="w-full bg-slate-900 rounded-full h-3.5 overflow-hidden border border-slate-700">
             <div id="tankProgressBar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 65%"></div>
           </div>
@@ -276,9 +271,9 @@
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
           <div>
             <h3 class="text-sm font-bold text-amber-400">DG Set, Boiler & HTP Running Log</h3>
-            <p class="text-xs text-slate-400">Auto-calculates Run Hours, Fuel Average & Deducts Tank Stock</p>
+            <p class="text-xs text-slate-400">Auto-calculates Run Hours, Fuel Average & Tank Stock</p>
           </div>
-          <button onclick="openModal('utilModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Meter Entry</button>
+          <button onclick="openNewUtilityModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Meter Entry</button>
         </div>
         <div id="utilList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
@@ -301,11 +296,135 @@
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex justify-between items-center">
           <div>
             <h3 class="text-sm font-bold text-amber-400">Department Admins & Trade Staff</h3>
-            <p class="text-xs text-slate-400">Super Admin: Sandeep Singh (J-5383)</p>
+            <p class="text-xs text-slate-400">Super Admin: Sandeep Singh (J-5383) • Edit Trade, Role or PIN</p>
           </div>
-          <button id="addAdminBtn" onclick="openModal('addAdminModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold hidden">+ Add Staff/Admin</button>
+          <button id="addAdminBtn" onclick="openAddAdminModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold hidden">+ Add Staff/Admin</button>
         </div>
         <div id="adminList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: USER GUIDE / TRAINING FOR NEW EMPLOYEES -->
+  <div id="helpGuideModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-5 space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+        <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-book-open mr-2"></i>CGC ERP User Guide (Aasaan Bhasha Mein)</h3>
+        <button onclick="closeModal('helpGuideModal')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+          <div class="font-bold text-emerald-400 text-sm mb-1">1. Login Kaise Karein?</div>
+          <p>Apna Employee Code small ya capital mein dalein (bina dash ke bhi chalega, jaise <code class="text-amber-300">dg01</code> ya <code class="text-amber-300">DG-01</code>) aur 4-digit PIN daalkar login karein. Upar <b>Key (🔑)</b> icon se apna PIN kabhi bhi badal sakte hain.</p>
+        </div>
+
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+          <div class="font-bold text-amber-400 text-sm mb-1">2. Store Stock (Samaan Issue / Jama)</div>
+          <p>Kisi complaint ke liye samaan lene par item ke neeche <b>"- Issue"</b> dabayein, quantity aur ticket/site likhein. Samaan kam hone par WhatsApp alert button apne aap aayega.</p>
+        </div>
+
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+          <div class="font-bold text-sky-400 text-sm mb-1">3. Tool Crib (Grinder, Drill, Welding Set)</div>
+          <p>Subah tool le jaate waqt <b>"Issue Tool"</b> par click karke apna naam aur site dalein. Kaam khatam hone par <b>"Mark Returned"</b> zaroor dabayein.</p>
+        </div>
+
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+          <div class="font-bold text-rose-400 text-sm mb-1">4. DG Room / Boiler Meter Entry</div>
+          <p><b>"+ Meter Entry"</b> mein Start HMR aur Stop HMR reading dalein. Run hours, average (Ltr/Hr), aur Main Diesel Tank ka bacha hua stock system khud calculate kar lega. Galti hone par entry ko <b>Edit</b> ya <b>Delete</b> bhi kar sakte hain.</p>
+        </div>
+
+        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
+          <div class="font-bold text-purple-400 text-sm mb-1">5. Machine QR Scan & Gate Pass</div>
+          <p>Machine par lage QR sticker ko phone camera se scan karte hi uski service sheet khul jayegi. Campus se bahar repair ke liye motor bhejne par <b>Gate Pass</b> banayein aur WhatsApp par gate slip share karein.</p>
+        </div>
+      </div>
+
+      <button onclick="closeModal('helpGuideModal')" class="w-full bg-amber-500 text-slate-900 font-bold py-2.5 rounded-xl text-sm">Samajh Aa Gaya (Close)</button>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD OR EDIT STAFF / ADMIN (SUPER ADMIN) -->
+  <div id="userFormModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
+      <h3 id="userFormTitle" class="text-lg font-bold text-amber-400">Add Trade Staff / Incharge</h3>
+      <input type="hidden" id="editOldUserId">
+      
+      <div>
+        <label class="text-xs text-slate-400">1. Select Trade / Department (Changes Portal View)</label>
+        <select id="formUserDept" onchange="autoPrefixEmpCode()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+          <option value="All">All Trades (Full ERP Access)</option>
+          <option value="DG_Boiler">DG Room / Boiler / HTP (DG-)</option>
+          <option value="Store">Store Department (STR-)</option>
+          <option value="Mechanical">Mechanical / Welding (MECH-)</option>
+          <option value="Electrical">Electrical Trade (ELEC-)</option>
+          <option value="Plumbing">Plumbing Trade (PLMB-)</option>
+          <option value="Carpentry">Carpentry Trade (CARP-)</option>
+          <option value="Mess">Mess Maintenance (MESS-)</option>
+          <option value="Gate">Security / Gate Pass Only (GATE-)</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-xs text-slate-400">2. Employee Code</label>
+          <input type="text" id="formUserId" placeholder="e.g. DG-01" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm uppercase mt-1 font-mono text-amber-300">
+        </div>
+        <div>
+          <label class="text-xs text-slate-400">3. Access Level</label>
+          <select id="formUserRole" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+            <option value="Operator">Operator (Trade Portal)</option>
+            <option value="Supervisor">Trade Incharge</option>
+            <option value="Store Incharge">Store Incharge</option>
+            <option value="Admin">Full Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <input type="text" id="formUserName" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      
+      <div class="grid grid-cols-2 gap-2">
+        <input type="tel" id="formUserPhone" placeholder="WhatsApp (10 digit)" maxlength="10" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <input type="text" id="formUserPin" placeholder="Security PIN" maxlength="6" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('userFormModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitUserForm()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save Details</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD OR EDIT DG / BOILER METER ENTRY -->
+  <div id="utilModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
+      <h3 id="utilModalTitle" class="text-lg font-bold text-amber-400">DG / Boiler Meter Entry</h3>
+      <input type="hidden" id="editUtilLogId">
+      <select id="utilEquip" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <option value="DG Set-1 (500 KVA)">DG Set-1 (500 KVA)</option>
+        <option value="DG Set-2 (380 KVA)">DG Set-2 (380 KVA)</option>
+        <option value="DG Set-3 (250 KVA)">DG Set-3 (250 KVA)</option>
+        <option value="Mess Steam Boiler">Mess Steam Boiler</option>
+        <option value="HTP / STP Plant">HTP / STP Plant</option>
+      </select>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[11px] text-slate-400">Start HMR</label>
+          <input type="number" step="0.1" id="utilStart" placeholder="e.g. 1420.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+        </div>
+        <div>
+          <label class="text-[11px] text-slate-400">Stop HMR</label>
+          <input type="number" step="0.1" id="utilStop" placeholder="e.g. 1423.0" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+        </div>
+      </div>
+      <div>
+        <label class="text-[11px] text-slate-400">Diesel Used (Liters - Auto-adjusts Tank Stock)</label>
+        <input type="number" step="0.1" id="utilDiesel" placeholder="e.g. 45" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <input type="text" id="utilRemarks" placeholder="Remarks" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('utilModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitUtilityLog()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save Log</button>
       </div>
     </div>
   </div>
@@ -325,51 +444,6 @@
       <div class="flex gap-2 pt-2">
         <button onclick="closeModal('refillModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
         <button onclick="submitDieselRefill()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Add to Stock</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ADD NEW ADMIN / TRADE OPERATOR -->
-  <div id="addAdminModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
-      <h3 class="text-lg font-bold text-amber-400">Add Trade Staff / Incharge</h3>
-      <div>
-        <label class="text-xs text-slate-400">1. Select Trade / Department</label>
-        <select id="newAdminDept" onchange="autoPrefixEmpCode()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
-          <option value="All">All Trades (Full ERP Access)</option>
-          <option value="DG_Boiler">DG Room / Boiler / HTP (DG-)</option>
-          <option value="Store">Store Department (STR-)</option>
-          <option value="Mechanical">Mechanical / Welding (MECH-)</option>
-          <option value="Electrical">Electrical Trade (ELEC-)</option>
-          <option value="Plumbing">Plumbing Trade (PLMB-)</option>
-          <option value="Carpentry">Carpentry Trade (CARP-)</option>
-          <option value="Mess">Mess Maintenance (MESS-)</option>
-          <option value="Gate">Security / Gate Pass Only (GATE-)</option>
-        </select>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="text-xs text-slate-400">2. Employee Code</label>
-          <input type="text" id="newAdminId" placeholder="e.g. DG-01" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm uppercase mt-1 font-mono text-amber-300">
-        </div>
-        <div>
-          <label class="text-xs text-slate-400">3. Access Level</label>
-          <select id="newAdminRole" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
-            <option value="Operator">Operator (Trade Portal)</option>
-            <option value="Supervisor">Trade Incharge</option>
-            <option value="Store Incharge">Store Incharge</option>
-            <option value="Admin">Full Admin</option>
-          </select>
-        </div>
-      </div>
-      <input type="text" id="newAdminName" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <div class="grid grid-cols-2 gap-2">
-        <input type="tel" id="newAdminPhone" placeholder="WhatsApp (10 digit)" maxlength="10" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-        <input type="text" id="newAdminPin" placeholder="Set PIN (e.g. 1234)" maxlength="6" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      </div>
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeModal('addAdminModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
-        <button onclick="submitNewAdmin()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Create & Share</button>
       </div>
     </div>
   </div>
@@ -417,19 +491,6 @@
       <div class="grid grid-cols-2 gap-2"><input type="text" id="gpQty" placeholder="Qty" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm"><input type="text" id="gpParty" placeholder="Vendor / Party" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm"></div>
       <input type="text" id="gpCarrier" placeholder="Person / Vehicle No" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       <div class="flex gap-2 pt-2"><button onclick="closeModal('gpModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitGatePass()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Issue Pass</button></div>
-    </div>
-  </div>
-
-  <div id="utilModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
-      <h3 class="text-lg font-bold text-amber-400">DG / Boiler Meter Entry</h3>
-      <select id="utilEquip" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-        <option value="DG Set-1 (500 KVA)">DG Set-1 (500 KVA)</option><option value="DG Set-2 (380 KVA)">DG Set-2 (380 KVA)</option><option value="DG Set-3 (250 KVA)">DG Set-3 (250 KVA)</option><option value="Mess Steam Boiler">Mess Steam Boiler</option><option value="HTP / STP Plant">HTP / STP Plant</option>
-      </select>
-      <div class="grid grid-cols-2 gap-2"><input type="number" step="0.1" id="utilStart" placeholder="Start HMR" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm"><input type="number" step="0.1" id="utilStop" placeholder="Stop HMR" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm"></div>
-      <input type="number" step="0.1" id="utilDiesel" placeholder="Diesel Used (Auto-deducts from Tank)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <input type="text" id="utilRemarks" placeholder="Remarks" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <div class="flex gap-2 pt-2"><button onclick="closeModal('utilModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitUtilityLog()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save Log</button></div>
     </div>
   </div>
 
@@ -492,7 +553,7 @@
     // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyymAuOhEDEo0zKVz6PTL-6M4ARtXQReoyBxsWWQiC6lOhNdd-05QtICrttXLT7iSpO/exec";
     const ATTENDANCE_APP_URL = "https://deadpoolgamein.github.io/workforce-attendance/";
-    const INTIMATION_APP_URL = "https://deadpoolgamein.github.io/Maintenance-Slips/";
+    const INTIMATION_APP_URL = "YOUR_INTIMATION_SLIP_GITHUB_URL_HERE";
     // =========================================================================
 
     function openConnectedApp(app) {
@@ -501,11 +562,18 @@
       window.open(target, '_blank');
     }
 
+    // Normalize Employee Code (handles lowercase, uppercase, spaces, with or without '-')
+    function normalizeCode(str) {
+      return String(str || "").replace(/[^A-Z0-9]/gi, '').toUpperCase();
+    }
+
     function autoPrefixEmpCode() {
-      const dept = document.getElementById('newAdminDept').value;
+      // Only auto-generate prefix when adding NEW user (not when editing)
+      if (document.getElementById('editOldUserId').value) return;
+      const dept = document.getElementById('formUserDept').value;
       const prefixMap = { "All": "J-", "DG_Boiler": "DG-", "Store": "STR-", "Mechanical": "MECH-", "Electrical": "ELEC-", "Plumbing": "PLMB-", "Carpentry": "CARP-", "Mess": "MESS-", "Gate": "GATE-" };
       const nextNum = String((appData.users ? appData.users.length : 1) + 1).padStart(2, '0');
-      document.getElementById('newAdminId').value = (prefixMap[dept] || "J-") + nextNum;
+      document.getElementById('formUserId').value = (prefixMap[dept] || "J-") + nextNum;
     }
 
     function getTradeRouting(user) {
@@ -564,10 +632,10 @@
       try {
         const res = await fetch(SCRIPT_URL);
         appData = await res.json();
-        document.getElementById('loginStatus').innerText = "System Ready • Enter Trade Code & PIN";
+        document.getElementById('loginStatus').innerText = "System Ready • Enter Code & PIN";
         const savedId = localStorage.getItem('cgc_erp_user');
         if (savedId) {
-          const found = appData.users.find(u => u.id === savedId);
+          const found = appData.users.find(u => normalizeCode(u.id) === normalizeCode(savedId));
           if (found) enterPortal(found);
         }
       } catch (e) {
@@ -575,10 +643,11 @@
       }
     }
 
+    // FLEXIBLE LOGIN (Small/Caps, with or without '-')
     function handleLogin() {
-      const id = document.getElementById('loginId').value.trim().toUpperCase();
+      const inputNorm = normalizeCode(document.getElementById('loginId').value);
       const pin = document.getElementById('loginPin').value.trim();
-      const user = appData.users.find(u => u.id === id && u.pin === pin);
+      const user = appData.users.find(u => normalizeCode(u.id) === inputNorm && String(u.pin) === pin);
       if (!user) return alert("Invalid Employee Code or PIN!");
       localStorage.setItem('cgc_erp_user', user.id);
       enterPortal(user);
@@ -706,7 +775,7 @@
       activeBtn.classList.add('bg-amber-500', 'text-slate-900', 'font-bold');
     }
 
-    // --- RENDER MAIN DIESEL TANK & UTILITY LOGS ---
+    // --- RENDER MAIN DIESEL TANK & UTILITY LOGS (WITH EDIT / DELETE) ---
     function renderUtilityLogs() {
       const tank = appData.fuelTank || { current: 0, capacity: 1000, minAlert: 200, updated: "-" };
       const isLow = tank.current <= tank.minAlert;
@@ -739,6 +808,7 @@
         container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No DG/Boiler readings logged yet.</p>`;
         return;
       }
+
       container.innerHTML = appData.utilityLogs.map(u => {
         const isRefill = String(u.diesel).startsWith('+');
         if (isRefill) {
@@ -746,7 +816,10 @@
             <div class="bg-emerald-950/40 p-4 rounded-xl border border-emerald-500/40 space-y-1">
               <div class="flex justify-between items-center">
                 <span class="font-bold text-emerald-400 text-sm"><i class="fa-solid fa-circle-plus mr-1"></i>${u.equip}</span>
-                <span class="text-[11px] text-slate-400">${u.time}</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] text-slate-400">${u.time}</span>
+                  <button onclick="deleteUtilityLog('${u.id}')" title="Delete Refill Entry" class="text-slate-400 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
               </div>
               <div class="text-lg font-extrabold text-emerald-300">${u.diesel} Liters Added</div>
               <div class="text-[11px] text-slate-400">${u.remarks} • By: ${u.operator}</div>
@@ -756,7 +829,11 @@
           <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
             <div class="flex justify-between items-center">
               <span class="font-bold text-amber-400 text-sm"><i class="fa-solid fa-bolt mr-1"></i>${u.equip}</span>
-              <span class="text-[11px] text-slate-400">${u.time}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] text-slate-400">${u.time}</span>
+                <button onclick="openEditUtilityModal('${u.id}')" title="Edit Entry" class="text-sky-400 hover:text-sky-300 text-xs px-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button onclick="deleteUtilityLog('${u.id}')" title="Delete Entry" class="text-rose-400 hover:text-rose-300 text-xs px-1"><i class="fa-solid fa-trash-can"></i></button>
+              </div>
             </div>
             <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-lg text-center">
               <div><span class="text-[10px] text-slate-400 block">Run Hours</span><b class="text-sm text-emerald-400">${u.hours} Hrs</b></div>
@@ -771,53 +848,172 @@
       }).join('');
     }
 
-    async function submitDieselRefill() {
-      const liters = document.getElementById('refillLiters').value;
-      if (!liters || Number(liters) <= 0) return alert("Enter valid liters!");
-      closeModal('refillModal');
-      document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          type: "REFILL_DIESEL_TANK",
-          liters,
-          billNo: document.getElementById('refillBill').value,
-          operator: `${currentUser.name} (${currentUser.id})`
-        })
-      });
-      const result = await res.json();
-      document.getElementById('refillLiters').value = "";
-      document.getElementById('refillBill').value = "";
-      alert(`Tank Refilled! New Main Tank Stock: ${result.newStock} Liters`);
-      loadData();
+    function openNewUtilityModal() {
+      document.getElementById('editUtilLogId').value = "";
+      document.getElementById('utilModalTitle').innerText = "New DG / Boiler Meter Entry";
+      document.getElementById('utilStart').value = "";
+      document.getElementById('utilStop').value = "";
+      document.getElementById('utilDiesel').value = "";
+      document.getElementById('utilRemarks').value = "";
+      openModal('utilModal');
+    }
+
+    function openEditUtilityModal(logId) {
+      const u = appData.utilityLogs.find(x => x.id === logId);
+      if (!u) return;
+      document.getElementById('editUtilLogId').value = u.id;
+      document.getElementById('utilModalTitle').innerText = "Edit Meter Entry (" + u.id + ")";
+      document.getElementById('utilEquip').value = u.equip;
+      document.getElementById('utilStart').value = u.start;
+      document.getElementById('utilStop').value = u.stop;
+      document.getElementById('utilDiesel').value = u.diesel;
+      document.getElementById('utilRemarks').value = u.remarks === "-" ? "" : u.remarks;
+      openModal('utilModal');
     }
 
     async function submitUtilityLog() {
+      const editId = document.getElementById('editUtilLogId').value;
       const start = document.getElementById('utilStart').value, stop = document.getElementById('utilStop').value;
       if (!start || !stop) return alert("Enter Start & Stop readings!");
       closeModal('utilModal'); document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_UTILITY_LOG", equip: document.getElementById('utilEquip').value, start, stop, diesel: document.getElementById('utilDiesel').value || 0, operator: `${currentUser.name} (${currentUser.id})`, remarks: document.getElementById('utilRemarks').value }) });
+
+      const payload = {
+        type: editId ? "EDIT_UTILITY_LOG" : "ADD_UTILITY_LOG",
+        logId: editId,
+        equip: document.getElementById('utilEquip').value,
+        start, stop,
+        diesel: document.getElementById('utilDiesel').value || 0,
+        operator: `${currentUser.name} (${currentUser.id})`,
+        remarks: document.getElementById('utilRemarks').value
+      };
+
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
       const result = await res.json();
       await loadData();
-      if (result.lowFuel && confirm(`⚠️ LOW DIESEL ALERT! Tank mein sirf ${result.remainingTank} Ltr bacha hai. Kya WhatsApp par order alert bhejna hai?`)) {
+      if (!editId && result.lowFuel && confirm(`⚠️ LOW DIESEL ALERT! Tank mein sirf ${result.remainingTank} Ltr bacha hai. WhatsApp alert bhejna hai?`)) {
         shareFuelStockWhatsApp();
-      } else {
-        alert(`Saved! Run: ${result.runHrs} Hrs | Avg: ${result.avg} L/Hr | Tank Left: ${result.remainingTank} Ltr`);
       }
+    }
+
+    async function deleteUtilityLog(logId) {
+      if (!confirm("Kya aap is meter entry ko delete karna chahte hain? (Diesel tank stock automatically adjust ho jayega)")) return;
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_UTILITY_LOG", logId }) });
+      loadData();
+    }
+
+    async function submitDieselRefill() {
+      const liters = document.getElementById('refillLiters').value;
+      if (!liters || Number(liters) <= 0) return alert("Enter valid liters!");
+      closeModal('refillModal'); document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "REFILL_DIESEL_TANK", liters, billNo: document.getElementById('refillBill').value, operator: `${currentUser.name} (${currentUser.id})` }) });
+      const result = await res.json();
+      document.getElementById('refillLiters').value = ""; document.getElementById('refillBill').value = "";
+      alert(`Tank Refilled! New Stock: ${result.newStock} Liters`);
+      loadData();
     }
 
     function shareFuelStockWhatsApp() {
       const tank = appData.fuelTank || { current: 0, capacity: 1000 };
-      const msg = `⛽ *CGC DG ROOM - DIESEL TANK STOCK REPORT*\n` +
-                  `--------------------------\n` +
-                  `🛢️ *Remaining Diesel:* ${tank.current} Liters (Capacity: ${tank.capacity} Ltr)\n` +
-                  `📅 *Updated:* ${tank.updated}\n` +
-                  `👷 *Reported By:* ${currentUser.name} (${currentUser.id})\n` +
-                  `${tank.current <= tank.minAlert ? '🚨 *URGENT: Diesel level low, please arrange refill!*' : '✅ Fuel stock sufficient.'}`;
+      const msg = `⛽ *CGC DG ROOM - DIESEL TANK STOCK REPORT*\n--------------------------\n🛢️ *Remaining Diesel:* ${tank.current} Liters (Capacity: ${tank.capacity} Ltr)\n📅 *Updated:* ${tank.updated}\n👷 *Reported By:* ${currentUser.name} (${currentUser.id})`;
       window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // --- OTHER RENDER & SUBMIT FUNCTIONS ---
+    // --- SUPER ADMIN STAFF ADD & EDIT ---
+    function renderAdmins() {
+      const isSuperAdmin = currentUser.role === "Super Admin";
+      document.getElementById('adminList').innerHTML = appData.users.map(u => `
+        <div class="bg-slate-800 p-4 rounded-xl border ${u.role === 'Super Admin' ? 'border-amber-500/60' : 'border-slate-700'} flex justify-between items-center gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-sm text-slate-100">${u.name}</span>
+              <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded font-mono text-amber-400">${u.id}</span>
+            </div>
+            <div class="text-xs text-slate-400 mt-1">${u.role} • Trade: <b class="text-slate-200">${u.dept}</b> ${u.phone ? '• 📞 ' + u.phone : ''}</div>
+            ${isSuperAdmin ? `<div class="text-[11px] text-emerald-400 font-mono mt-0.5">PIN: ${u.pin}</div>` : ''}
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${isSuperAdmin ? `
+              <button onclick="sendAdminCredentialsWhatsApp('${u.id}')" title="Send ID & PIN on WhatsApp" class="bg-green-600 hover:bg-green-500 text-white px-2.5 py-2 rounded-lg text-xs font-bold"><i class="fa-brands fa-whatsapp"></i></button>
+              <button onclick="openEditAdminModal('${u.id}')" title="Edit Staff / Trade" class="bg-sky-600/25 hover:bg-sky-600 text-sky-300 hover:text-white p-2 rounded-lg text-xs"><i class="fa-solid fa-pen-to-square"></i></button>
+            ` : ''}
+            ${(isSuperAdmin && u.id !== "J-5383") ? `
+              <button onclick="deleteAdmin('${u.id}', '${u.name}')" title="Delete Staff" class="bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white p-2 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>
+            ` : `<span class="text-[10px] text-amber-400 font-bold uppercase">${u.role === 'Super Admin' ? 'OWNER' : ''}</span>`}
+          </div>
+        </div>`).join('');
+    }
+
+    function openAddAdminModal() {
+      document.getElementById('editOldUserId').value = "";
+      document.getElementById('userFormTitle').innerText = "Add Trade Staff / Incharge";
+      document.getElementById('formUserDept').value = "All";
+      document.getElementById('formUserRole').value = "Operator";
+      document.getElementById('formUserName').value = "";
+      document.getElementById('formUserPhone').value = "";
+      document.getElementById('formUserPin').value = "";
+      document.getElementById('formUserId').disabled = false;
+      autoPrefixEmpCode();
+      openModal('userFormModal');
+    }
+
+    function openEditAdminModal(userId) {
+      const u = appData.users.find(x => x.id === userId);
+      if (!u) return;
+      document.getElementById('editOldUserId').value = u.id;
+      document.getElementById('userFormTitle').innerText = "Edit Staff Details (" + u.id + ")";
+      document.getElementById('formUserDept').value = u.dept || "All";
+      document.getElementById('formUserId').value = u.id;
+      document.getElementById('formUserId').disabled = (u.id === "J-5383");
+      document.getElementById('formUserRole').value = u.role === "Super Admin" ? "Admin" : u.role;
+      document.getElementById('formUserName').value = u.name;
+      document.getElementById('formUserPhone').value = u.phone || "";
+      document.getElementById('formUserPin').value = u.pin;
+      openModal('userFormModal');
+    }
+
+    async function submitUserForm() {
+      const oldUserId = document.getElementById('editOldUserId').value;
+      const userId = document.getElementById('formUserId').value.trim().toUpperCase();
+      const name = document.getElementById('formUserName').value.trim();
+      const pin = document.getElementById('formUserPin').value.trim();
+      if (!userId || !name || !pin) return alert("Code, Name, and PIN required!");
+
+      closeModal('userFormModal');
+      document.getElementById('loader').classList.remove('hidden');
+
+      const payload = {
+        type: oldUserId ? "EDIT_USER" : "ADD_USER",
+        oldUserId,
+        userId,
+        name,
+        role: document.getElementById('formUserRole').value,
+        dept: document.getElementById('formUserDept').value,
+        phone: document.getElementById('formUserPhone').value.trim(),
+        pin
+      };
+
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      const result = await res.json();
+      if (result.status === "error") {
+        alert(result.message);
+        document.getElementById('loader').classList.add('hidden');
+      } else {
+        await loadData();
+        if (!oldUserId && confirm(`Created! Send Login Code & PIN on WhatsApp?`)) {
+          sendAdminCredentialsWhatsApp(userId);
+        }
+      }
+    }
+
+    async function deleteAdmin(userId, name) {
+      if (!confirm(`Remove "${name}"?`)) return;
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_USER", userId }) });
+      loadData();
+    }
+
+    // --- OTHER EXISTING FUNCTIONS ---
     function renderStore() {
       const q = document.getElementById('searchStore').value.toLowerCase();
       const canDelete = ["Super Admin", "Admin", "Store Incharge"].includes(currentUser.role);
@@ -997,25 +1193,6 @@
         </div>`).join('');
     }
 
-    function renderAdmins() {
-      const isSuperAdmin = currentUser.role === "Super Admin";
-      document.getElementById('adminList').innerHTML = appData.users.map(u => `
-        <div class="bg-slate-800 p-4 rounded-xl border ${u.role === 'Super Admin' ? 'border-amber-500/60' : 'border-slate-700'} flex justify-between items-center gap-2">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-bold text-sm text-slate-100">${u.name}</span>
-              <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded font-mono text-amber-400">${u.id}</span>
-            </div>
-            <div class="text-xs text-slate-400 mt-1">${u.role} • Trade: <b class="text-slate-200">${u.dept}</b> ${u.phone ? '• 📞 ' + u.phone : ''}</div>
-            ${isSuperAdmin ? `<div class="text-[11px] text-emerald-400 font-mono mt-0.5">PIN: ${u.pin}</div>` : ''}
-          </div>
-          <div class="flex items-center gap-1.5">
-            ${isSuperAdmin ? `<button onclick="sendAdminCredentialsWhatsApp('${u.id}')" class="bg-green-600 hover:bg-green-500 text-white px-2.5 py-2 rounded-lg text-xs font-bold"><i class="fa-brands fa-whatsapp"></i></button>` : ''}
-            ${(isSuperAdmin && u.id !== "J-5383") ? `<button onclick="deleteAdmin('${u.id}', '${u.name}')" class="bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white p-2 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>` : `<span class="text-[10px] text-amber-400 font-bold uppercase">${u.role === 'Super Admin' ? 'OWNER' : ''}</span>`}
-          </div>
-        </div>`).join('');
-    }
-
     async function submitGatePass() {
       const desc = document.getElementById('gpDesc').value.trim(); if (!desc) return alert("Description required!");
       closeModal('gpModal'); document.getElementById('loader').classList.remove('hidden');
@@ -1137,23 +1314,6 @@
       loadData();
     }
 
-    async function submitNewAdmin() {
-      const userId = document.getElementById('newAdminId').value.trim().toUpperCase(), name = document.getElementById('newAdminName').value.trim(), pin = document.getElementById('newAdminPin').value.trim();
-      if (!userId || !name || !pin) return alert("Code, Name, and PIN required!");
-      closeModal('addAdminModal'); document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_USER", userId, name, role: document.getElementById('newAdminRole').value, dept: document.getElementById('newAdminDept').value, phone: document.getElementById('newAdminPhone').value.trim(), pin }) });
-      const result = await res.json();
-      if (result.status === "error") { alert(result.message); document.getElementById('loader').classList.add('hidden'); }
-      else { await loadData(); if (confirm(`Created! Send Login Code & PIN on WhatsApp?`)) sendAdminCredentialsWhatsApp(userId); }
-    }
-
-    async function deleteAdmin(userId, name) {
-      if (!confirm(`Remove "${name}"?`)) return;
-      document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_USER", userId }) });
-      loadData();
-    }
-
     async function submitPinChange() {
       const oldPin = document.getElementById('oldPinInput').value.trim(), newPin = document.getElementById('newPinInput').value.trim();
       if (!oldPin || newPin.length < 4) return alert("Enter valid PIN!");
@@ -1165,10 +1325,7 @@
       document.getElementById('loader').classList.add('hidden');
     }
 
-    function openModal(id) {
-      if (id === 'addAdminModal') autoPrefixEmpCode();
-      document.getElementById(id).classList.replace('hidden', 'flex');
-    }
+    function openModal(id) { document.getElementById(id).classList.replace('hidden', 'flex'); }
     function closeModal(id) { document.getElementById(id).classList.replace('flex', 'hidden'); }
 
     window.onload = initApp;
