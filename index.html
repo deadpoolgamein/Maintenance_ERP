@@ -38,7 +38,6 @@
         </button>
       </div>
 
-      <!-- Employee Code Format Guide -->
       <div class="bg-slate-900/80 border border-slate-700/70 rounded-xl p-3 text-[11px] text-slate-400 space-y-1">
         <div class="font-bold text-slate-300"><i class="fa-solid fa-id-badge text-amber-400 mr-1"></i>CGC Trade Code Prefixes:</div>
         <div class="grid grid-cols-2 gap-1 font-mono text-[10px]">
@@ -102,7 +101,7 @@
     </header>
 
     <div class="max-w-5xl mx-auto p-4 space-y-4">
-      <!-- EXECUTIVE HOD SUMMARY STRIP (ONLY FOR SUPER ADMIN / ALL-TRADE ADMIN) -->
+      <!-- EXECUTIVE HOD SUMMARY STRIP -->
       <div id="execSummaryBox" class="hidden bg-slate-800/70 border border-slate-700/90 rounded-2xl p-3.5 space-y-3">
         <div class="flex justify-between items-center">
           <span class="text-xs font-bold uppercase tracking-wider text-slate-300">
@@ -140,10 +139,10 @@
 
           <div onclick="switchTab('utility')" class="cursor-pointer bg-slate-900 hover:bg-slate-950 border border-emerald-500/40 rounded-xl p-3 transition">
             <div class="flex justify-between items-center text-emerald-400 text-xs font-semibold">
-              <span id="kpiMonthLabel">Month Diesel</span><i class="fa-solid fa-gas-pump"></i>
+              <span>Main Tank Stock</span><i class="fa-solid fa-gas-pump"></i>
             </div>
             <div id="kpiDieselLtr" class="text-xl font-extrabold text-emerald-400 mt-1">0 Ltr</div>
-            <div id="kpiDieselCost" class="text-[10px] text-slate-300 font-semibold mt-0.5">Est. ₹0</div>
+            <div id="kpiDieselCost" class="text-[10px] text-slate-300 font-semibold mt-0.5">Month Used: 0 L</div>
           </div>
         </div>
       </div>
@@ -235,12 +234,49 @@
         <div id="gpList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
 
-      <!-- 5. DG / BOILER DAILY LOGBOOK -->
+      <!-- 5. DG / BOILER DAILY LOGBOOK + MAIN DIESEL TANK STOCK CARD -->
       <div id="sec-utility" class="hidden space-y-4">
+        <!-- MAIN DIESEL TANK LIVE STOCK CARD -->
+        <div id="dieselTankCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-3 shadow-lg">
+          <div class="flex flex-wrap justify-between items-start gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-amber-500/20 text-amber-400 p-2 rounded-lg text-sm"><i class="fa-solid fa-gas-pump"></i></span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-bold text-slate-100">Main Diesel Tank Stock</h3>
+                  <p id="tankUpdatedText" class="text-[11px] text-slate-400">Auto-deducts on DG entry</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="shareFuelStockWhatsApp()" class="bg-slate-700 hover:bg-slate-600 text-green-400 px-2.5 py-2 rounded-lg text-xs font-bold">
+                <i class="fa-brands fa-whatsapp"></i>
+              </button>
+              <button onclick="openModal('refillModal')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg text-xs font-bold">
+                + Add Diesel
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-end">
+            <div>
+              <span id="tankCurrentLtr" class="text-3xl font-extrabold text-emerald-400">0</span>
+              <span id="tankCapacityText" class="text-xs text-slate-400 font-semibold">/ 1000 Liters</span>
+            </div>
+            <span id="tankStatusBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400">LEVEL OK</span>
+          </div>
+
+          <!-- Visual Tank Progress Bar -->
+          <div class="w-full bg-slate-900 rounded-full h-3.5 overflow-hidden border border-slate-700">
+            <div id="tankProgressBar" class="bg-emerald-500 h-full transition-all duration-500" style="width: 65%"></div>
+          </div>
+        </div>
+
+        <!-- DG / BOILER METER LOG HEADER -->
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
           <div>
             <h3 class="text-sm font-bold text-amber-400">DG Set, Boiler & HTP Running Log</h3>
-            <p class="text-xs text-slate-400">Auto-calculates Run Hours & Fuel Average</p>
+            <p class="text-xs text-slate-400">Auto-calculates Run Hours, Fuel Average & Deducts Tank Stock</p>
           </div>
           <button onclick="openModal('utilModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Meter Entry</button>
         </div>
@@ -274,13 +310,31 @@
     </div>
   </div>
 
-  <!-- MODAL: ADD NEW ADMIN / TRADE OPERATOR (WITH AUTO CODE PREFIX) -->
+  <!-- MODAL: + ADD DIESEL TO MAIN TANK -->
+  <div id="refillModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-sm w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-emerald-400"><i class="fa-solid fa-gas-pump mr-1.5"></i>Add Diesel to Tank</h3>
+      <div>
+        <label class="text-xs text-slate-400">Diesel Quantity Received (Liters)</label>
+        <input type="number" step="0.1" id="refillLiters" placeholder="e.g. 200" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <div>
+        <label class="text-xs text-slate-400">Slip / Tanker / Bill Number</label>
+        <input type="text" id="refillBill" placeholder="e.g. Pump Slip #412" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('refillModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitDieselRefill()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Add to Stock</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD NEW ADMIN / TRADE OPERATOR -->
   <div id="addAdminModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
       <h3 class="text-lg font-bold text-amber-400">Add Trade Staff / Incharge</h3>
-      
       <div>
-        <label class="text-xs text-slate-400">1. Select Trade / Department (Auto-sets Portal & Prefix)</label>
+        <label class="text-xs text-slate-400">1. Select Trade / Department</label>
         <select id="newAdminDept" onchange="autoPrefixEmpCode()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
           <option value="All">All Trades (Full ERP Access)</option>
           <option value="DG_Boiler">DG Room / Boiler / HTP (DG-)</option>
@@ -293,7 +347,6 @@
           <option value="Gate">Security / Gate Pass Only (GATE-)</option>
         </select>
       </div>
-
       <div class="grid grid-cols-2 gap-2">
         <div>
           <label class="text-xs text-slate-400">2. Employee Code</label>
@@ -309,14 +362,11 @@
           </select>
         </div>
       </div>
-
       <input type="text" id="newAdminName" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      
       <div class="grid grid-cols-2 gap-2">
         <input type="tel" id="newAdminPhone" placeholder="WhatsApp (10 digit)" maxlength="10" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
         <input type="text" id="newAdminPin" placeholder="Set PIN (e.g. 1234)" maxlength="6" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       </div>
-
       <div class="flex gap-2 pt-2">
         <button onclick="closeModal('addAdminModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
         <button onclick="submitNewAdmin()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Create & Share</button>
@@ -377,7 +427,7 @@
         <option value="DG Set-1 (500 KVA)">DG Set-1 (500 KVA)</option><option value="DG Set-2 (380 KVA)">DG Set-2 (380 KVA)</option><option value="DG Set-3 (250 KVA)">DG Set-3 (250 KVA)</option><option value="Mess Steam Boiler">Mess Steam Boiler</option><option value="HTP / STP Plant">HTP / STP Plant</option>
       </select>
       <div class="grid grid-cols-2 gap-2"><input type="number" step="0.1" id="utilStart" placeholder="Start HMR" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm"><input type="number" step="0.1" id="utilStop" placeholder="Stop HMR" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm"></div>
-      <input type="number" step="0.1" id="utilDiesel" placeholder="Diesel Used (Liters)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <input type="number" step="0.1" id="utilDiesel" placeholder="Diesel Used (Auto-deducts from Tank)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       <input type="text" id="utilRemarks" placeholder="Remarks" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       <div class="flex gap-2 pt-2"><button onclick="closeModal('utilModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitUtilityLog()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save Log</button></div>
     </div>
@@ -438,12 +488,11 @@
 
   <script>
     // =========================================================================
-    // CONFIGURATION: APNE URLS AUR DIESEL RATE YAHAN SET KAREIN
+    // CONFIGURATION: APNE URLS YAHAN SET KAREIN
     // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyymAuOhEDEo0zKVz6PTL-6M4ARtXQReoyBxsWWQiC6lOhNdd-05QtICrttXLT7iSpO/exec";
-    const ATTENDANCE_APP_URL = "adpoolgamein.github.io/workforce-attendance/";
+    const ATTENDANCE_APP_URL = "https://deadpoolgamein.github.io/workforce-attendance/";
     const INTIMATION_APP_URL = "https://deadpoolgamein.github.io/Maintenance-Slips/";
-    const DIESEL_RATE_PER_LTR = 90;
     // =========================================================================
 
     function openConnectedApp(app) {
@@ -452,171 +501,62 @@
       window.open(target, '_blank');
     }
 
-    // --- AUTO PREFIX GENERATOR WHEN ADDING EMPLOYEE ---
     function autoPrefixEmpCode() {
       const dept = document.getElementById('newAdminDept').value;
-      const prefixMap = {
-        "All": "J-",
-        "DG_Boiler": "DG-",
-        "Store": "STR-",
-        "Mechanical": "MECH-",
-        "Electrical": "ELEC-",
-        "Plumbing": "PLMB-",
-        "Carpentry": "CARP-",
-        "Mess": "MESS-",
-        "Gate": "GATE-"
-      };
+      const prefixMap = { "All": "J-", "DG_Boiler": "DG-", "Store": "STR-", "Mechanical": "MECH-", "Electrical": "ELEC-", "Plumbing": "PLMB-", "Carpentry": "CARP-", "Mess": "MESS-", "Gate": "GATE-" };
       const nextNum = String((appData.users ? appData.users.length : 1) + 1).padStart(2, '0');
       document.getElementById('newAdminId').value = (prefixMap[dept] || "J-") + nextNum;
     }
 
-    // --- TRADE-BASED SMART ROUTING ENGINE ---
     function getTradeRouting(user) {
       const id = user.id.toUpperCase();
       const dept = (user.dept || "All").toLowerCase();
 
-      // 1. Super Admin or Full Admin
       if (user.role === "Super Admin" || (user.role === "Admin" && dept === "all")) {
-        return {
-          label: "Master ERP Portal",
-          allowedTabs: ['store', 'tools', 'pm', 'gatepass', 'utility', 'logs', 'admins'],
-          defaultTab: 'store',
-          storeFilter: null,
-          showExecKPI: true
-        };
+        return { label: "Master ERP Portal", allowedTabs: ['store', 'tools', 'pm', 'gatepass', 'utility', 'logs', 'admins'], defaultTab: 'store', storeFilter: null, showExecKPI: true };
       }
-
-      // 2. DG / Boiler / HTP Operators
       if (id.startsWith("DG-") || id.startsWith("BLR-") || dept.includes("dg") || dept.includes("boiler")) {
-        return {
-          label: "DG & Boiler Portal",
-          allowedTabs: ['utility', 'pm'],
-          defaultTab: 'utility',
-          storeFilter: null,
-          showExecKPI: false
-        };
+        return { label: "DG & Boiler Portal", allowedTabs: ['utility', 'pm'], defaultTab: 'utility', storeFilter: null, showExecKPI: false };
       }
-
-      // 3. Store Department
       if (id.startsWith("STR-") || dept === "store" || user.role === "Store Incharge") {
-        return {
-          label: "Store & Tool Crib Portal",
-          allowedTabs: ['store', 'tools', 'gatepass', 'logs'],
-          defaultTab: 'store',
-          storeFilter: null,
-          showExecKPI: false
-        };
+        return { label: "Store & Tool Crib Portal", allowedTabs: ['store', 'tools', 'gatepass', 'logs'], defaultTab: 'store', storeFilter: null, showExecKPI: false };
       }
-
-      // 4. Security / Gate Pass Only
       if (id.startsWith("GATE-") || dept === "gate") {
-        return {
-          label: "Security Gate Pass Portal",
-          allowedTabs: ['gatepass'],
-          defaultTab: 'gatepass',
-          storeFilter: null,
-          showExecKPI: false
-        };
+        return { label: "Security Gate Pass Portal", allowedTabs: ['gatepass'], defaultTab: 'gatepass', storeFilter: null, showExecKPI: false };
       }
-
-      // 5. Mechanical / Welding
       if (id.startsWith("MECH-") || dept.includes("mech")) {
-        return {
-          label: "Mechanical & Welding Portal",
-          allowedTabs: ['store', 'tools', 'pm'],
-          defaultTab: 'store',
-          storeFilter: "Mechanical",
-          showExecKPI: false
-        };
+        return { label: "Mechanical & Welding Portal", allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: "Mechanical", showExecKPI: false };
       }
-
-      // 6. Electrical
       if (id.startsWith("ELEC-") || dept.includes("elec")) {
-        return {
-          label: "Electrical Trade Portal",
-          allowedTabs: ['store', 'tools', 'pm'],
-          defaultTab: 'store',
-          storeFilter: "Electrical",
-          showExecKPI: false
-        };
+        return { label: "Electrical Trade Portal", allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: "Electrical", showExecKPI: false };
       }
-
-      // 7. Plumbing
       if (id.startsWith("PLMB-") || dept.includes("plumb")) {
-        return {
-          label: "Plumbing Trade Portal",
-          allowedTabs: ['store', 'tools', 'pm'],
-          defaultTab: 'store',
-          storeFilter: "Plumbing",
-          showExecKPI: false
-        };
+        return { label: "Plumbing Trade Portal", allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: "Plumbing", showExecKPI: false };
       }
-
-      // 8. Carpentry
       if (id.startsWith("CARP-") || dept.includes("carp")) {
-        return {
-          label: "Carpentry Trade Portal",
-          allowedTabs: ['store', 'tools'],
-          defaultTab: 'store',
-          storeFilter: "Carpentry",
-          showExecKPI: false
-        };
+        return { label: "Carpentry Trade Portal", allowedTabs: ['store', 'tools'], defaultTab: 'store', storeFilter: "Carpentry", showExecKPI: false };
       }
-
-      // 9. Mess Maintenance
       if (id.startsWith("MESS-") || dept.includes("mess")) {
-        return {
-          label: "Mess Maintenance Portal",
-          allowedTabs: ['store', 'pm', 'utility'],
-          defaultTab: 'pm',
-          storeFilter: "Mess",
-          showExecKPI: false
-        };
+        return { label: "Mess Maintenance Portal", allowedTabs: ['store', 'pm', 'utility'], defaultTab: 'pm', storeFilter: "Mess", showExecKPI: false };
       }
-
-      // Default Fallback
-      return {
-        label: `${user.dept} Portal`,
-        allowedTabs: ['store', 'tools', 'pm'],
-        defaultTab: 'store',
-        storeFilter: null,
-        showExecKPI: false
-      };
+      return { label: `${user.dept} Portal`, allowedTabs: ['store', 'tools', 'pm'], defaultTab: 'store', storeFilter: null, showExecKPI: false };
     }
 
-    // --- DYNAMIC PWA SETUP ---
     (function setupPWA() {
       const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="#0f172a"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-size="240" fill="#fbbf24" font-family="sans-serif" font-weight="bold">CGC</text></svg>`;
       const iconUrl = "data:image/svg+xml;base64," + btoa(iconSvg);
-      const manifest = {
-        name: "CGC Maintenance ERP",
-        short_name: "CGC Maint",
-        start_url: window.location.href.split('?')[0],
-        display: "standalone",
-        background_color: "#0f172a",
-        theme_color: "#0f172a",
-        icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml" }]
-      };
+      const manifest = { name: "CGC Maintenance ERP", short_name: "CGC Maint", start_url: window.location.href.split('?')[0], display: "standalone", background_color: "#0f172a", theme_color: "#0f172a", icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml" }] };
       document.getElementById('pwa-manifest').setAttribute('href', 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifest)));
     })();
 
     let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('installAppBtn').classList.remove('hidden');
-    });
-
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installAppBtn').classList.remove('hidden'); });
     async function installPWA() {
       if (!deferredPrompt) return alert("Browser menu se 'Add to Home Screen' par click karein.");
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      document.getElementById('installAppBtn').classList.add('hidden');
+      deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installAppBtn').classList.add('hidden');
     }
 
-    // --- APP STATE ---
-    let appData = { users: [], inventory: [], tools: [], recentLogs: [], gatePasses: [], utilityLogs: [], machines: [] };
+    let appData = { users: [], inventory: [], tools: [], recentLogs: [], gatePasses: [], utilityLogs: [], fuelTank: { current: 0, capacity: 1000, minAlert: 200 }, machines: [] };
     let currentUser = null;
     let currentRouting = null;
 
@@ -654,10 +594,8 @@
       document.getElementById('roleBadge').innerText = currentRouting.label;
       document.getElementById('tradePortalBadge').innerHTML = `<i class="fa-solid fa-layer-group mr-1"></i> ${currentRouting.label}`;
 
-      // Show/Hide Executive KPI Box
       document.getElementById('execSummaryBox').classList.toggle('hidden', !currentRouting.showExecKPI);
 
-      // Show/Hide Trade Store Filter Badge
       const filterBadge = document.getElementById('storeTradeFilterBadge');
       if (currentRouting.storeFilter) {
         filterBadge.innerText = `Trade: ${currentRouting.storeFilter}`;
@@ -666,15 +604,8 @@
         filterBadge.classList.add('hidden');
       }
 
-      // Show ONLY Allowed Tabs for this Trade
-      const allTabs = ['store', 'tools', 'pm', 'gatepass', 'utility', 'logs', 'admins'];
-      allTabs.forEach(t => {
-        const btn = document.getElementById('tab-' + t);
-        if (currentRouting.allowedTabs.includes(t)) {
-          btn.classList.remove('hidden');
-        } else {
-          btn.classList.add('hidden');
-        }
+      ['store', 'tools', 'pm', 'gatepass', 'utility', 'logs', 'admins'].forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('hidden', !currentRouting.allowedTabs.includes(t));
       });
 
       const isSuperAdmin = user.role === "Super Admin";
@@ -685,7 +616,6 @@
 
       renderAll();
 
-      // Switch to Trade's Default Portal Tab (or scanned QR machine)
       const params = new URLSearchParams(window.location.search);
       const scannedMch = params.get('machine');
       if (scannedMch && currentRouting.allowedTabs.includes('pm')) {
@@ -719,51 +649,39 @@
       const lowStockCount = appData.inventory.filter(i => i.stock <= i.min).length;
       const outToolsCount = appData.tools.filter(t => t.status !== "Available").length;
       const duePmCount = (appData.machines || []).filter(m => m.nextDate <= todayStr).length;
+      const tank = appData.fuelTank || { current: 0 };
 
-      let monthDiesel = 0;
+      let monthUsed = 0;
       (appData.utilityLogs || []).forEach(u => {
-        if (u.time && u.time.includes(currentMonthShort) && u.time.includes(currentYear)) {
-          monthDiesel += Number(u.diesel) || 0;
+        if (u.time && u.time.includes(currentMonthShort) && u.time.includes(currentYear) && !String(u.diesel).startsWith('+')) {
+          monthUsed += Number(u.diesel) || 0;
         }
       });
-      const estCost = Math.round(monthDiesel * DIESEL_RATE_PER_LTR);
 
       document.getElementById('kpiLowStock').innerText = lowStockCount;
       document.getElementById('kpiOutTools').innerText = outToolsCount;
       document.getElementById('kpiDuePM').innerText = duePmCount;
-      document.getElementById('kpiMonthLabel').innerText = `${currentMonthShort} Diesel`;
-      document.getElementById('kpiDieselLtr').innerText = `${monthDiesel.toFixed(1)} Ltr`;
-      document.getElementById('kpiDieselCost').innerText = `Est. ₹${estCost.toLocaleString('en-IN')}`;
+      document.getElementById('kpiDieselLtr').innerText = `${tank.current} Ltr`;
+      document.getElementById('kpiDieselCost').innerText = `${currentMonthShort} Used: ${monthUsed.toFixed(1)} Ltr`;
     }
 
     function shareHODBriefingWhatsApp() {
       const today = new Date();
       const todayStr = today.toISOString().split('T')[0];
-      const currentMonthShort = today.toLocaleString('en-US', { month: 'short' });
-      const currentYear = String(today.getFullYear());
-
       const lowItems = appData.inventory.filter(i => i.stock <= i.min);
       const outTools = appData.tools.filter(t => t.status !== "Available");
       const duePMs = (appData.machines || []).filter(m => m.nextDate <= todayStr);
       const openGPs = (appData.gatePasses || []).filter(g => g.status === "Out for Repair");
-
-      let monthDiesel = 0, monthHours = 0;
-      (appData.utilityLogs || []).forEach(u => {
-        if (u.time && u.time.includes(currentMonthShort) && u.time.includes(currentYear)) {
-          monthDiesel += Number(u.diesel) || 0;
-          monthHours += Number(u.hours) || 0;
-        }
-      });
-      const estCost = Math.round(monthDiesel * DIESEL_RATE_PER_LTR);
+      const tank = appData.fuelTank || { current: 0, capacity: 1000 };
 
       const msg = `📊 *CGC MAINTENANCE DEPT - EXECUTIVE SUMMARY*\n` +
                   `📅 Date: ${today.toLocaleDateString('en-IN')}\n` +
                   `==============================\n` +
-                  `⚠️ *Low Stock Items:* ${lowItems.length} items\n` +
+                  `⛽ *Main Diesel Tank Stock:* ${tank.current} / ${tank.capacity} Ltr\n` +
+                  `⚠️ *Low Stock Store Items:* ${lowItems.length} items\n` +
                   `🛠️ *Tools Issued Outside:* ${outTools.length} tools\n` +
                   `🔧 *PM Service Due:* ${duePMs.length} machines\n` +
                   `🚚 *Open Gate Passes (RGP):* ${openGPs.length} pending\n` +
-                  `⛽ *${currentMonthShort} ${currentYear} Fuel Log:* ${monthDiesel.toFixed(1)} Ltr (${monthHours.toFixed(1)} Hrs) | Est. ₹${estCost.toLocaleString('en-IN')}\n` +
                   `==============================\n` +
                   `Reported by: *${currentUser.name}* (${currentUser.id})`;
 
@@ -788,17 +706,125 @@
       activeBtn.classList.add('bg-amber-500', 'text-slate-900', 'font-bold');
     }
 
+    // --- RENDER MAIN DIESEL TANK & UTILITY LOGS ---
+    function renderUtilityLogs() {
+      const tank = appData.fuelTank || { current: 0, capacity: 1000, minAlert: 200, updated: "-" };
+      const isLow = tank.current <= tank.minAlert;
+      const pct = Math.min(100, Math.max(0, Math.round((tank.current / (tank.capacity || 1000)) * 100)));
+
+      document.getElementById('tankCurrentLtr').innerText = tank.current;
+      document.getElementById('tankCurrentLtr').className = `text-3xl font-extrabold ${isLow ? 'text-rose-400' : 'text-emerald-400'}`;
+      document.getElementById('tankCapacityText').innerText = `/ ${tank.capacity} Liters (${pct}%)`;
+      document.getElementById('tankUpdatedText').innerText = `Updated: ${tank.updated} • Min Reserve: ${tank.minAlert} Ltr`;
+
+      const badge = document.getElementById('tankStatusBadge');
+      const bar = document.getElementById('tankProgressBar');
+      const card = document.getElementById('dieselTankCard');
+
+      if (isLow) {
+        badge.innerText = "⚠️ LOW DIESEL ALERT";
+        badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-rose-500/20 text-rose-400";
+        bar.className = "bg-rose-500 h-full transition-all duration-500";
+        card.className = "bg-slate-800 border-2 border-rose-500/80 rounded-2xl p-4 space-y-3 shadow-lg";
+      } else {
+        badge.innerText = "FUEL LEVEL OK";
+        badge.className = "text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400";
+        bar.className = "bg-emerald-500 h-full transition-all duration-500";
+        card.className = "bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-3 shadow-lg";
+      }
+      bar.style.width = pct + "%";
+
+      const container = document.getElementById('utilList');
+      if (!appData.utilityLogs || appData.utilityLogs.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No DG/Boiler readings logged yet.</p>`;
+        return;
+      }
+      container.innerHTML = appData.utilityLogs.map(u => {
+        const isRefill = String(u.diesel).startsWith('+');
+        if (isRefill) {
+          return `
+            <div class="bg-emerald-950/40 p-4 rounded-xl border border-emerald-500/40 space-y-1">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-emerald-400 text-sm"><i class="fa-solid fa-circle-plus mr-1"></i>${u.equip}</span>
+                <span class="text-[11px] text-slate-400">${u.time}</span>
+              </div>
+              <div class="text-lg font-extrabold text-emerald-300">${u.diesel} Liters Added</div>
+              <div class="text-[11px] text-slate-400">${u.remarks} • By: ${u.operator}</div>
+            </div>`;
+        }
+        return `
+          <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-amber-400 text-sm"><i class="fa-solid fa-bolt mr-1"></i>${u.equip}</span>
+              <span class="text-[11px] text-slate-400">${u.time}</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-lg text-center">
+              <div><span class="text-[10px] text-slate-400 block">Run Hours</span><b class="text-sm text-emerald-400">${u.hours} Hrs</b></div>
+              <div><span class="text-[10px] text-slate-400 block">Fuel Used</span><b class="text-sm text-rose-400">-${u.diesel} Ltr</b></div>
+              <div><span class="text-[10px] text-slate-400 block">Average</span><b class="text-sm text-sky-400">${u.avg} L/Hr</b></div>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-400">
+              <span>HMR: ${u.start} → ${u.stop} • Op: ${u.operator}</span>
+              <button onclick="shareUtilityWhatsApp('${u.id}')" class="text-green-400 hover:text-green-300 font-bold"><i class="fa-brands fa-whatsapp"></i> Share</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    async function submitDieselRefill() {
+      const liters = document.getElementById('refillLiters').value;
+      if (!liters || Number(liters) <= 0) return alert("Enter valid liters!");
+      closeModal('refillModal');
+      document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          type: "REFILL_DIESEL_TANK",
+          liters,
+          billNo: document.getElementById('refillBill').value,
+          operator: `${currentUser.name} (${currentUser.id})`
+        })
+      });
+      const result = await res.json();
+      document.getElementById('refillLiters').value = "";
+      document.getElementById('refillBill').value = "";
+      alert(`Tank Refilled! New Main Tank Stock: ${result.newStock} Liters`);
+      loadData();
+    }
+
+    async function submitUtilityLog() {
+      const start = document.getElementById('utilStart').value, stop = document.getElementById('utilStop').value;
+      if (!start || !stop) return alert("Enter Start & Stop readings!");
+      closeModal('utilModal'); document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_UTILITY_LOG", equip: document.getElementById('utilEquip').value, start, stop, diesel: document.getElementById('utilDiesel').value || 0, operator: `${currentUser.name} (${currentUser.id})`, remarks: document.getElementById('utilRemarks').value }) });
+      const result = await res.json();
+      await loadData();
+      if (result.lowFuel && confirm(`⚠️ LOW DIESEL ALERT! Tank mein sirf ${result.remainingTank} Ltr bacha hai. Kya WhatsApp par order alert bhejna hai?`)) {
+        shareFuelStockWhatsApp();
+      } else {
+        alert(`Saved! Run: ${result.runHrs} Hrs | Avg: ${result.avg} L/Hr | Tank Left: ${result.remainingTank} Ltr`);
+      }
+    }
+
+    function shareFuelStockWhatsApp() {
+      const tank = appData.fuelTank || { current: 0, capacity: 1000 };
+      const msg = `⛽ *CGC DG ROOM - DIESEL TANK STOCK REPORT*\n` +
+                  `--------------------------\n` +
+                  `🛢️ *Remaining Diesel:* ${tank.current} Liters (Capacity: ${tank.capacity} Ltr)\n` +
+                  `📅 *Updated:* ${tank.updated}\n` +
+                  `👷 *Reported By:* ${currentUser.name} (${currentUser.id})\n` +
+                  `${tank.current <= tank.minAlert ? '🚨 *URGENT: Diesel level low, please arrange refill!*' : '✅ Fuel stock sufficient.'}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // --- OTHER RENDER & SUBMIT FUNCTIONS ---
     function renderStore() {
       const q = document.getElementById('searchStore').value.toLowerCase();
       const canDelete = ["Super Admin", "Admin", "Store Incharge"].includes(currentUser.role);
       const tradeFilter = currentRouting ? currentRouting.storeFilter : null;
 
       document.getElementById('storeList').innerHTML = appData.inventory
-        .filter(i => {
-          const matchesTrade = !tradeFilter || i.category.toLowerCase().includes(tradeFilter.toLowerCase());
-          const matchesQuery = i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q);
-          return matchesTrade && matchesQuery;
-        })
+        .filter(i => (!tradeFilter || i.category.toLowerCase().includes(tradeFilter.toLowerCase())) && (i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q)))
         .map(item => {
           const isLow = item.stock <= item.min;
           return `
@@ -831,11 +857,7 @@
       const tradeFilter = currentRouting ? currentRouting.storeFilter : null;
 
       document.getElementById('toolList').innerHTML = appData.tools
-        .filter(t => {
-          const matchesTrade = !tradeFilter || t.dept.toLowerCase().includes(tradeFilter.toLowerCase());
-          const matchesQuery = t.name.toLowerCase().includes(q) || t.dept.toLowerCase().includes(q);
-          return matchesTrade && matchesQuery;
-        })
+        .filter(t => (!tradeFilter || t.dept.toLowerCase().includes(tradeFilter.toLowerCase())) && (t.name.toLowerCase().includes(q) || t.dept.toLowerCase().includes(q)))
         .map(tool => {
           const avail = tool.status === "Available";
           return `
@@ -882,21 +904,15 @@
                 </div>
                 <h4 class="font-bold text-base mt-1">${m.name}</h4>
               </div>
-              <span class="text-[11px] px-2 py-0.5 rounded font-bold ${isOverdue ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}">
-                ${isOverdue ? 'SERVICE DUE' : 'OK'}
-              </span>
+              <span class="text-[11px] px-2 py-0.5 rounded font-bold ${isOverdue ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400'}">${isOverdue ? 'SERVICE DUE' : 'OK'}</span>
             </div>
             <div class="bg-slate-900 p-2.5 rounded-lg text-xs space-y-1 text-slate-300">
               <div class="flex justify-between"><span>Last Service: <b>${m.lastDate}</b></span><span>Next Due: <b class="${isOverdue ? 'text-rose-400' : 'text-amber-400'}">${m.nextDate}</b></span></div>
               <div class="text-[11px] text-slate-400">Checklist: ${m.notes} (By: ${m.doneBy})</div>
             </div>
             <div class="flex gap-2 pt-1">
-              <button onclick="openQrSticker('${m.id}', '${m.name}', '${m.location}')" class="w-1/3 bg-slate-700 hover:bg-slate-600 text-amber-400 py-2 rounded-lg text-xs font-bold">
-                <i class="fa-solid fa-qrcode mr-1"></i> QR Sticker
-              </button>
-              <button onclick="openCompletePmModal('${m.id}', '${m.name}')" class="w-2/3 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-xs font-bold">
-                <i class="fa-solid fa-check-double mr-1"></i> Log Service Done
-              </button>
+              <button onclick="openQrSticker('${m.id}', '${m.name}', '${m.location}')" class="w-1/3 bg-slate-700 hover:bg-slate-600 text-amber-400 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-qrcode mr-1"></i> QR Sticker</button>
+              <button onclick="openCompletePmModal('${m.id}', '${m.name}')" class="w-2/3 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-check-double mr-1"></i> Log Service Done</button>
             </div>
           </div>`;
       }).join('');
@@ -904,9 +920,7 @@
 
     function openQrSticker(id, name, loc) {
       const scanUrl = `${window.location.href.split('?')[0]}?machine=${id}`;
-      document.getElementById('qrMchName').innerText = name;
-      document.getElementById('qrMchLoc').innerText = loc;
-      document.getElementById('qrMchId').innerText = `ID: ${id}`;
+      document.getElementById('qrMchName').innerText = name; document.getElementById('qrMchLoc').innerText = loc; document.getElementById('qrMchId').innerText = `ID: ${id}`;
       document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(scanUrl)}`;
       openModal('qrModal');
     }
@@ -971,31 +985,6 @@
       }).join('');
     }
 
-    function renderUtilityLogs() {
-      const container = document.getElementById('utilList');
-      if (!appData.utilityLogs || appData.utilityLogs.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No DG/Boiler readings logged yet.</p>`;
-        return;
-      }
-      container.innerHTML = appData.utilityLogs.map(u => `
-        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
-          <div class="flex justify-between items-center">
-            <span class="font-bold text-amber-400 text-sm"><i class="fa-solid fa-bolt mr-1"></i>${u.equip}</span>
-            <span class="text-[11px] text-slate-400">${u.time}</span>
-          </div>
-          <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-lg text-center">
-            <div><span class="text-[10px] text-slate-400 block">Run Hours</span><b class="text-sm text-emerald-400">${u.hours} Hrs</b></div>
-            <div><span class="text-[10px] text-slate-400 block">Fuel Used</span><b class="text-sm text-amber-400">${u.diesel} Ltr</b></div>
-            <div><span class="text-[10px] text-slate-400 block">Average</span><b class="text-sm text-sky-400">${u.avg} L/Hr</b></div>
-          </div>
-          <div class="flex justify-between items-center text-[11px] text-slate-400">
-            <span>HMR: ${u.start} → ${u.stop} • Op: ${u.operator}</span>
-            <button onclick="shareUtilityWhatsApp('${u.id}')" class="text-green-400 hover:text-green-300 font-bold"><i class="fa-brands fa-whatsapp"></i> Share</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
     function renderLogs() {
       document.getElementById('logList').innerHTML = appData.recentLogs.map(l => `
         <div class="bg-slate-900 p-2.5 rounded-lg flex justify-between items-center border border-slate-700/50">
@@ -1040,16 +1029,6 @@
       if (!confirm(`Confirm material for ${gpNo} received back?`)) return;
       document.getElementById('loader').classList.remove('hidden');
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "RETURN_GATEPASS", gpNo }) });
-      loadData();
-    }
-
-    async function submitUtilityLog() {
-      const start = document.getElementById('utilStart').value, stop = document.getElementById('utilStop').value;
-      if (!start || !stop) return alert("Enter Start & Stop readings!");
-      closeModal('utilModal'); document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_UTILITY_LOG", equip: document.getElementById('utilEquip').value, start, stop, diesel: document.getElementById('utilDiesel').value || 0, operator: `${currentUser.name} (${currentUser.id})`, remarks: document.getElementById('utilRemarks').value }) });
-      const result = await res.json();
-      alert(`Saved! Total Run: ${result.runHrs} Hrs | Avg: ${result.avg} Ltr/Hr`);
       loadData();
     }
 
