@@ -29,7 +29,7 @@
           <label class="text-xs text-slate-400">Security PIN</label>
           <input type="password" id="loginPin" placeholder="••••" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 mt-1 text-sm tracking-widest focus:border-amber-400 focus:outline-none">
         </div>
-        <button onclick="handleLogin()" id="loginBtn" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 rounded-lg text-sm transition">
+        <button onclick="handleLogin()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 rounded-lg text-sm transition">
           Login to Portal
         </button>
       </div>
@@ -62,60 +62,92 @@
       </div>
     </header>
 
-    <!-- Navigation Tabs -->
+    <!-- Navigation Tabs (6 Modules) -->
     <div class="max-w-5xl mx-auto p-4">
-      <div class="grid grid-cols-4 gap-1.5 bg-slate-800 p-1.5 rounded-xl mb-5 border border-slate-700">
-        <button onclick="switchTab('store')" id="tab-store" class="tab-btn bg-amber-500 text-slate-900 font-bold py-2 rounded-lg text-xs sm:text-sm transition">
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-1.5 bg-slate-800 p-1.5 rounded-xl mb-5 border border-slate-700">
+        <button onclick="switchTab('store')" id="tab-store" class="tab-btn bg-amber-500 text-slate-900 font-bold py-2 rounded-lg text-xs transition">
           <i class="fa-solid fa-boxes-stacked mr-1"></i> Store
         </button>
-        <button onclick="switchTab('tools')" id="tab-tools" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs sm:text-sm transition">
+        <button onclick="switchTab('tools')" id="tab-tools" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs transition">
           <i class="fa-solid fa-hammer mr-1"></i> Tools
         </button>
-        <button onclick="switchTab('logs')" id="tab-logs" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs sm:text-sm transition">
+        <button onclick="switchTab('gatepass')" id="tab-gatepass" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs transition">
+          <i class="fa-solid fa-truck-ramp-box mr-1"></i> Gate Pass
+        </button>
+        <button onclick="switchTab('utility')" id="tab-utility" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs transition">
+          <i class="fa-solid fa-gauge-high mr-1"></i> DG/Boiler
+        </button>
+        <button onclick="switchTab('logs')" id="tab-logs" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs transition">
           <i class="fa-solid fa-clock-rotate-left mr-1"></i> Logs
         </button>
-        <button onclick="switchTab('admins')" id="tab-admins" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs sm:text-sm transition">
+        <button onclick="switchTab('admins')" id="tab-admins" class="tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs transition">
           <i class="fa-solid fa-users-gear mr-1"></i> Admins
         </button>
       </div>
 
-      <!-- Loading Indicator -->
+      <!-- Loader -->
       <div id="loader" class="text-center py-8 hidden">
         <i class="fa-solid fa-circle-notch fa-spin text-3xl text-amber-400"></i>
         <p class="text-xs text-slate-400 mt-2">Syncing with CGC Server...</p>
       </div>
 
-      <!-- SECTION 1: STORE INVENTORY -->
+      <!-- 1. STORE INVENTORY -->
       <div id="sec-store" class="space-y-4">
         <div class="flex flex-wrap gap-2">
-          <input type="text" id="searchStore" onkeyup="renderStore()" placeholder="Search item (Rod, MCB, Pipe)..." class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm flex-1 min-w-[180px] focus:outline-none focus:border-amber-400">
-          <button onclick="shareLowStockWhatsApp()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center gap-1.5">
-            <i class="fa-brands fa-whatsapp text-base"></i> Low Stock List
+          <input type="text" id="searchStore" onkeyup="renderStore()" placeholder="Search item (Rod, MCB, Pipe)..." class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm flex-1 min-w-[160px] focus:outline-none focus:border-amber-400">
+          <button onclick="shareLowStockWhatsApp()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Low Stock
           </button>
-          <button onclick="openModal('addItemModal')" class="admin-only bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-bold">
+          <button onclick="openModal('addItemModal')" class="admin-only bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg text-xs font-bold">
             + Item
           </button>
         </div>
-
         <div id="storeList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
 
-      <!-- SECTION 2: TOOL CRIB -->
+      <!-- 2. TOOL CRIB -->
       <div id="sec-tools" class="hidden space-y-4">
         <div class="flex flex-wrap gap-2">
-          <input type="text" id="searchTools" onkeyup="renderTools()" placeholder="Search tool (Grinder, Drill)..." class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm flex-1 min-w-[180px] focus:outline-none focus:border-amber-400">
-          <button onclick="shareIssuedToolsWhatsApp()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center gap-1.5">
-            <i class="fa-brands fa-whatsapp text-base"></i> Issued Tools
+          <input type="text" id="searchTools" onkeyup="renderTools()" placeholder="Search tool (Grinder, Drill)..." class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm flex-1 min-w-[160px] focus:outline-none focus:border-amber-400">
+          <button onclick="shareIssuedToolsWhatsApp()" class="bg-green-600 hover:bg-green-500 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Issued Tools
           </button>
-          <button onclick="openModal('addToolModal')" class="admin-only bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-bold">
+          <button onclick="openModal('addToolModal')" class="admin-only bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg text-xs font-bold">
             + Tool
           </button>
         </div>
-
         <div id="toolList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
 
-      <!-- SECTION 3: LOGS -->
+      <!-- 3. DIGITAL GATE PASS -->
+      <div id="sec-gatepass" class="hidden space-y-4">
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h3 class="text-sm font-bold text-amber-400">Outward Material & Scrap Gate Pass</h3>
+            <p class="text-xs text-slate-400">Track Motors for Repair (RGP) & Scrap Outward (NRGP)</p>
+          </div>
+          <button onclick="openModal('gpModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">
+            + Create Gate Pass
+          </button>
+        </div>
+        <div id="gpList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+
+      <!-- 4. DG / BOILER DAILY LOGBOOK -->
+      <div id="sec-utility" class="hidden space-y-4">
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
+          <div>
+            <h3 class="text-sm font-bold text-amber-400">DG Set, Boiler & HTP Running Log</h3>
+            <p class="text-xs text-slate-400">Auto-calculates Run Hours & Diesel Average (Ltr/Hr)</p>
+          </div>
+          <button onclick="openModal('utilModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">
+            + New Meter Entry
+          </button>
+        </div>
+        <div id="utilList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+      </div>
+
+      <!-- 5. STORE LOGS -->
       <div id="sec-logs" class="hidden space-y-4">
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700">
           <div class="flex justify-between items-center mb-3">
@@ -128,7 +160,7 @@
         </div>
       </div>
 
-      <!-- SECTION 4: ADMIN & INCHARGE MANAGEMENT -->
+      <!-- 6. ADMINS -->
       <div id="sec-admins" class="hidden space-y-4">
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex justify-between items-center">
           <div>
@@ -136,152 +168,149 @@
             <p class="text-xs text-slate-400">Super Admin: Sandeep Singh (J-5383)</p>
           </div>
           <button id="addAdminBtn" onclick="openModal('addAdminModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold hidden">
-            + Add Admin / Incharge
+            + Add Admin
           </button>
         </div>
-
         <div id="adminList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL 1: ISSUE / RESTOCK STORE ITEM -->
+  <!-- MODAL: CREATE GATE PASS -->
+  <div id="gpModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-amber-400">Generate Digital Gate Pass</h3>
+      <select id="gpType" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <option value="Returnable (RGP)">Returnable (RGP - For Repair/Service)</option>
+        <option value="Non-Returnable (NRGP)">Non-Returnable (NRGP - Scrap/Waste)</option>
+      </select>
+      <input type="text" id="gpDesc" placeholder="Material Description (e.g. 5HP Crompton Motor)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div class="grid grid-cols-2 gap-2">
+        <input type="text" id="gpQty" placeholder="Qty (e.g. 1 No / 150 Kg)" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <input type="text" id="gpParty" placeholder="Vendor / Scrap Dealer" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      </div>
+      <input type="text" id="gpCarrier" placeholder="Person / Vehicle No (e.g. PB-65-AB-1234)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('gpModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitGatePass()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Issue Gate Pass</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD DG / BOILER LOG -->
+  <div id="utilModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-amber-400">DG / Boiler Meter Entry</h3>
+      <select id="utilEquip" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <option value="DG Set-1 (500 KVA)">DG Set-1 (500 KVA)</option>
+        <option value="DG Set-2 (380 KVA)">DG Set-2 (380 KVA)</option>
+        <option value="DG Set-3 (250 KVA)">DG Set-3 (250 KVA)</option>
+        <option value="Mess Steam Boiler">Mess Steam Boiler</option>
+        <option value="HTP / STP Plant">HTP / STP Plant</option>
+      </select>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="text-[11px] text-slate-400">Start Reading (HMR)</label>
+          <input type="number" step="0.1" id="utilStart" placeholder="e.g. 1420.5" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+        </div>
+        <div>
+          <label class="text-[11px] text-slate-400">Stop Reading (HMR)</label>
+          <input type="number" step="0.1" id="utilStop" placeholder="e.g. 1423.0" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+        </div>
+      </div>
+      <div>
+        <label class="text-[11px] text-slate-400">Diesel / Fuel Consumed (Liters)</label>
+        <input type="number" step="0.1" id="utilDiesel" placeholder="e.g. 45" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
+      </div>
+      <input type="text" id="utilRemarks" placeholder="Remarks (e.g. Power cut / Oil pressure OK)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('utilModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
+        <button onclick="submitUtilityLog()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save Log</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXISTING MODALS (STORE, TOOLS, ADMIN, PIN) -->
   <div id="txnModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-4">
       <h3 id="txnTitle" class="text-lg font-bold text-amber-400">Issue Material</h3>
-      <input type="hidden" id="txnItemId">
-      <input type="hidden" id="txnAction">
-      
-      <div>
-        <label class="text-xs text-slate-400">Quantity</label>
-        <input type="number" id="txnQty" min="1" value="1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1">
-      </div>
-      <div>
-        <label class="text-xs text-slate-400">Technician / Receiver Name</label>
-        <input type="text" id="txnStaff" placeholder="e.g. Rajesh (Electrician)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1">
-      </div>
-      <div id="ticketDiv">
-        <label class="text-xs text-slate-400">Complaint Ticket / Site Location</label>
-        <input type="text" id="txnTicket" placeholder="e.g. Mess-1 / TKT-104" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1">
-      </div>
-
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeModal('txnModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
-        <button onclick="submitStoreTxn()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Confirm</button>
-      </div>
+      <input type="hidden" id="txnItemId"><input type="hidden" id="txnAction">
+      <div><label class="text-xs text-slate-400">Quantity</label><input type="number" id="txnQty" min="1" value="1" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1"></div>
+      <div><label class="text-xs text-slate-400">Technician / Receiver</label><input type="text" id="txnStaff" placeholder="e.g. Rajesh (Electrician)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1"></div>
+      <div id="ticketDiv"><label class="text-xs text-slate-400">Complaint Ticket / Site</label><input type="text" id="txnTicket" placeholder="e.g. Mess-1 / TKT-104" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1"></div>
+      <div class="flex gap-2 pt-2"><button onclick="closeModal('txnModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitStoreTxn()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Confirm</button></div>
     </div>
   </div>
 
-  <!-- MODAL 2: ADD NEW STORE ITEM -->
   <div id="addItemModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
       <h3 class="text-lg font-bold text-emerald-400">Add New Store Material</h3>
-      <input type="text" id="newItemName" placeholder="Item Name (e.g. Bearing 6205)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <input type="text" id="newItemName" placeholder="Item Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       <select id="newItemCat" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-        <option value="Mechanical">Mechanical / Welding</option>
-        <option value="Electrical">Electrical</option>
-        <option value="Plumbing">Plumbing</option>
-        <option value="Carpentry">Carpentry</option>
-        <option value="Mess">Mess Maintenance</option>
+        <option value="Mechanical">Mechanical / Welding</option><option value="Electrical">Electrical</option><option value="Plumbing">Plumbing</option><option value="Carpentry">Carpentry</option><option value="Mess">Mess Maintenance</option>
       </select>
       <div class="grid grid-cols-3 gap-2">
-        <input type="text" id="newItemUnit" placeholder="Unit (Pcs/Kg)" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-        <input type="number" id="newItemStock" placeholder="Opening Qty" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <input type="text" id="newItemUnit" placeholder="Unit" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <input type="number" id="newItemStock" placeholder="Qty" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
         <input type="number" id="newItemMin" placeholder="Min Alert" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       </div>
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeModal('addItemModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
-        <button onclick="submitNewItem()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Save Item</button>
-      </div>
+      <div class="flex gap-2 pt-2"><button onclick="closeModal('addItemModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitNewItem()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Save Item</button></div>
     </div>
   </div>
 
-  <!-- MODAL 3: ADD NEW TOOL -->
   <div id="addToolModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
       <h3 class="text-lg font-bold text-emerald-400">Add New Power Tool</h3>
-      <input type="text" id="newToolName" placeholder="Tool Name (e.g. Makita Cutter 7 Inch)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <input type="text" id="newToolName" placeholder="Tool Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       <select id="newToolDept" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-        <option value="Mechanical">Mechanical / Welding</option>
-        <option value="Electrical">Electrical</option>
-        <option value="Plumbing">Plumbing</option>
-        <option value="Carpentry">Carpentry</option>
+        <option value="Mechanical">Mechanical</option><option value="Electrical">Electrical</option><option value="Plumbing">Plumbing</option><option value="Carpentry">Carpentry</option>
       </select>
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeModal('addToolModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
-        <button onclick="submitNewTool()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Save Tool</button>
-      </div>
+      <div class="flex gap-2 pt-2"><button onclick="closeModal('addToolModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitNewTool()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Save Tool</button></div>
     </div>
   </div>
 
-  <!-- MODAL 4: TOOL CHECKOUT -->
   <div id="toolModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-4">
       <h3 id="toolModalTitle" class="text-lg font-bold text-amber-400">Issue Power Tool</h3>
       <input type="hidden" id="selectedToolId">
-      <div>
-        <label class="text-xs text-slate-400">Technician Name</label>
-        <input type="text" id="toolStaff" placeholder="Enter Name & ID" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1">
-      </div>
-      <div>
-        <label class="text-xs text-slate-400">Work Site / Block</label>
-        <input type="text" id="toolSite" placeholder="e.g. Boys Hostel-3 / Boiler Room" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1">
-      </div>
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeModal('toolModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
-        <button onclick="submitToolCheckout()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Issue Tool</button>
-      </div>
+      <div><label class="text-xs text-slate-400">Technician Name</label><input type="text" id="toolStaff" placeholder="Enter Name & ID" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1"></div>
+      <div><label class="text-xs text-slate-400">Work Site / Block</label><input type="text" id="toolSite" placeholder="e.g. Hostel-3 / Boiler" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 mt-1"></div>
+      <div class="flex gap-2 pt-2"><button onclick="closeModal('toolModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitToolCheckout()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Issue Tool</button></div>
     </div>
   </div>
 
-  <!-- MODAL 5: ADD NEW ADMIN / INCHARGE -->
   <div id="addAdminModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
       <h3 class="text-lg font-bold text-amber-400">Add Admin / Store Incharge</h3>
       <input type="text" id="newAdminId" placeholder="Employee ID (e.g. J-4012)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm uppercase">
       <input type="text" id="newAdminName" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       <select id="newAdminRole" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-        <option value="Admin">Admin (Full Store/Tool Access)</option>
-        <option value="Store Incharge">Store Incharge</option>
-        <option value="Supervisor">Department Supervisor</option>
-        <option value="Operator">Operator (Issue/Return Only)</option>
+        <option value="Admin">Admin</option><option value="Store Incharge">Store Incharge</option><option value="Supervisor">Supervisor</option><option value="Operator">Operator (Entry Only)</option>
       </select>
       <div class="grid grid-cols-2 gap-2">
         <select id="newAdminDept" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-          <option value="All">All Trades</option>
-          <option value="Mechanical">Mechanical</option>
-          <option value="Electrical">Electrical</option>
-          <option value="Plumbing">Plumbing</option>
-          <option value="Mess">Mess Maint.</option>
+          <option value="All">All Trades</option><option value="Mechanical">Mechanical</option><option value="Electrical">Electrical</option><option value="Plumbing">Plumbing</option><option value="Mess">Mess Maint.</option>
         </select>
-        <input type="tel" id="newAdminPhone" placeholder="WhatsApp No (10 digit)" maxlength="10" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+        <input type="tel" id="newAdminPhone" placeholder="WhatsApp (10 digit)" maxlength="10" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       </div>
-      <input type="text" id="newAdminPin" placeholder="Set Initial PIN (e.g. 1234)" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeModal('addAdminModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
-        <button onclick="submitNewAdmin()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Create User</button>
-      </div>
+      <input type="text" id="newAdminPin" placeholder="Set PIN (e.g. 1234)" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div class="flex gap-2 pt-2"><button onclick="closeModal('addAdminModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitNewAdmin()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Create User</button></div>
     </div>
   </div>
 
-  <!-- MODAL 6: CHANGE OWN PIN -->
   <div id="pinModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-sm w-full p-5 space-y-3">
-      <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-key mr-1.5"></i>Change Security PIN</h3>
-      <input type="password" id="oldPinInput" placeholder="Enter Current PIN" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <input type="password" id="newPinInput" placeholder="Enter New PIN (4-6 digits)" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeModal('pinModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
-        <button onclick="submitPinChange()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Update PIN</button>
-      </div>
+      <h3 class="text-lg font-bold text-amber-400">Change Security PIN</h3>
+      <input type="password" id="oldPinInput" placeholder="Current PIN" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <input type="password" id="newPinInput" placeholder="New PIN" maxlength="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
+      <div class="flex gap-2 pt-2"><button onclick="closeModal('pinModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button><button onclick="submitPinChange()" class="w-1/2 bg-emerald-600 py-2.5 rounded-lg font-bold">Update PIN</button></div>
     </div>
   </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyymAuOhEDEo0zKVz6PTL-6M4ARtXQReoyBxsWWQiC6lOhNdd-05QtICrttXLT7iSpO/exec";
 
-    let appData = { users: [], inventory: [], tools: [], recentLogs: [] };
+    let appData = { users: [], inventory: [], tools: [], recentLogs: [], gatePasses: [], utilityLogs: [] };
     let currentUser = null;
 
     async function initApp() {
@@ -289,7 +318,6 @@
         const res = await fetch(SCRIPT_URL);
         appData = await res.json();
         document.getElementById('loginStatus').innerText = "System Ready • Enter ID & PIN";
-        
         const savedId = localStorage.getItem('cgc_erp_user');
         if (savedId) {
           const found = appData.users.find(u => u.id === savedId);
@@ -304,7 +332,6 @@
       const id = document.getElementById('loginId').value.trim().toUpperCase();
       const pin = document.getElementById('loginPin').value.trim();
       const user = appData.users.find(u => u.id === id && u.pin === pin);
-
       if (!user) return alert("Invalid Employee ID or PIN!");
       localStorage.setItem('cgc_erp_user', user.id);
       enterPortal(user);
@@ -320,23 +347,13 @@
       const isSuperAdmin = user.role === "Super Admin";
       const isAdminLevel = ["Super Admin", "Admin", "Store Incharge"].includes(user.role);
 
-      if (isSuperAdmin) {
-        document.getElementById('addAdminBtn').classList.remove('hidden');
-      } else {
-        document.getElementById('addAdminBtn').classList.add('hidden');
-      }
-
-      document.querySelectorAll('.admin-only').forEach(el => {
-        el.style.display = isAdminLevel ? 'inline-block' : 'none';
-      });
+      document.getElementById('addAdminBtn').classList.toggle('hidden', !isSuperAdmin);
+      document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdminLevel ? 'inline-block' : 'none');
 
       renderAll();
     }
 
-    function logout() {
-      localStorage.removeItem('cgc_erp_user');
-      location.reload();
-    }
+    function logout() { localStorage.removeItem('cgc_erp_user'); location.reload(); }
 
     async function loadData() {
       document.getElementById('loader').classList.remove('hidden');
@@ -344,106 +361,142 @@
         const res = await fetch(SCRIPT_URL);
         appData = await res.json();
         renderAll();
-      } catch (e) {
-        alert("Sync failed!");
-      }
+      } catch (e) { alert("Sync failed!"); }
       document.getElementById('loader').classList.add('hidden');
     }
 
     function renderAll() {
-      renderStore();
-      renderTools();
-      renderLogs();
-      renderAdmins();
+      renderStore(); renderTools(); renderGatePasses(); renderUtilityLogs(); renderLogs(); renderAdmins();
     }
 
     function switchTab(tab) {
-      ['store', 'tools', 'logs', 'admins'].forEach(t => {
+      ['store', 'tools', 'gatepass', 'utility', 'logs', 'admins'].forEach(t => {
         document.getElementById('sec-' + t).classList.add('hidden');
-        document.getElementById('tab-' + t).className = "tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs sm:text-sm transition";
+        document.getElementById('tab-' + t).className = "tab-btn text-slate-300 font-semibold py-2 rounded-lg text-xs transition";
       });
       document.getElementById('sec-' + tab).classList.remove('hidden');
-      document.getElementById('tab-' + tab).className = "tab-btn bg-amber-500 text-slate-900 font-bold py-2 rounded-lg text-xs sm:text-sm transition";
+      document.getElementById('tab-' + tab).className = "tab-btn bg-amber-500 text-slate-900 font-bold py-2 rounded-lg text-xs transition";
     }
 
+    // --- RENDER STORE & TOOLS ---
     function renderStore() {
       const q = document.getElementById('searchStore').value.toLowerCase();
       const canDelete = ["Super Admin", "Admin", "Store Incharge"].includes(currentUser.role);
-      const container = document.getElementById('storeList');
-      container.innerHTML = "";
-
-      appData.inventory.filter(i => i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q)).forEach(item => {
-        const isLow = item.stock <= item.min;
-        container.innerHTML += `
-          <div class="bg-slate-800 p-4 rounded-xl border ${isLow ? 'border-rose-500/70' : 'border-slate-700'} flex flex-col justify-between">
-            <div class="flex justify-between items-start">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="text-[10px] uppercase tracking-wider bg-slate-700 px-2 py-0.5 rounded text-slate-300">${item.category}</span>
-                  ${canDelete ? `<button onclick="deleteStoreItem('${item.id}', '${item.name}')" class="text-slate-500 hover:text-rose-500 text-xs px-1"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+      document.getElementById('storeList').innerHTML = appData.inventory
+        .filter(i => i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q))
+        .map(item => {
+          const isLow = item.stock <= item.min;
+          return `
+            <div class="bg-slate-800 p-4 rounded-xl border ${isLow ? 'border-rose-500/70' : 'border-slate-700'} flex flex-col justify-between">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] uppercase bg-slate-700 px-2 py-0.5 rounded text-slate-300">${item.category}</span>
+                    ${canDelete ? `<button onclick="deleteStoreItem('${item.id}', '${item.name}')" class="text-slate-500 hover:text-rose-500 text-xs"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                  </div>
+                  <h4 class="font-bold text-base mt-1">${item.name}</h4>
                 </div>
-                <h4 class="font-bold text-base mt-1">${item.name}</h4>
+                <div class="text-right">
+                  <span class="text-2xl font-extrabold ${isLow ? 'text-rose-400' : 'text-emerald-400'}">${item.stock}</span>
+                  <span class="text-xs text-slate-400 block">${item.unit}</span>
+                </div>
               </div>
-              <div class="text-right">
-                <span class="text-2xl font-extrabold ${isLow ? 'text-rose-400' : 'text-emerald-400'}">${item.stock}</span>
-                <span class="text-xs text-slate-400 block">${item.unit}</span>
+              ${isLow ? `<div class="text-xs text-rose-400 mt-2 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Low Stock (Min: ${item.min})</div>` : ''}
+              <div class="flex gap-2 mt-4">
+                <button onclick="openTxnModal('${item.id}', '${item.name}', 'ISSUE')" class="w-1/2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 py-1.5 rounded-lg text-xs font-bold">- Issue</button>
+                <button onclick="openTxnModal('${item.id}', '${item.name}', 'RESTOCK')" class="w-1/2 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/40 py-1.5 rounded-lg text-xs font-bold">+ Add Stock</button>
               </div>
-            </div>
-            ${isLow ? `<div class="text-xs text-rose-400 mt-2 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Low Stock (Min: ${item.min})</div>` : ''}
-            <div class="flex gap-2 mt-4">
-              <button onclick="openTxnModal('${item.id}', '${item.name}', 'ISSUE')" class="w-1/2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/40 py-1.5 rounded-lg text-xs font-bold transition">
-                - Issue
-              </button>
-              <button onclick="openTxnModal('${item.id}', '${item.name}', 'RESTOCK')" class="w-1/2 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/40 py-1.5 rounded-lg text-xs font-bold transition">
-                + Add Stock
-              </button>
-            </div>
-          </div>
-        `;
-      });
+            </div>`;
+        }).join('');
     }
 
     function renderTools() {
       const q = document.getElementById('searchTools').value.toLowerCase();
       const canDelete = ["Super Admin", "Admin", "Store Incharge"].includes(currentUser.role);
-      const container = document.getElementById('toolList');
-      container.innerHTML = "";
-      
-      appData.tools.filter(t => t.name.toLowerCase().includes(q) || t.dept.toLowerCase().includes(q)).forEach(tool => {
-        const avail = tool.status === "Available";
-        container.innerHTML += `
-          <div class="bg-slate-800 p-4 rounded-xl border ${avail ? 'border-slate-700' : 'border-amber-500/60'}">
+      document.getElementById('toolList').innerHTML = appData.tools
+        .filter(t => t.name.toLowerCase().includes(q) || t.dept.toLowerCase().includes(q))
+        .map(tool => {
+          const avail = tool.status === "Available";
+          return `
+            <div class="bg-slate-800 p-4 rounded-xl border ${avail ? 'border-slate-700' : 'border-amber-500/60'}">
+              <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-slate-400 font-mono">${tool.id} • ${tool.dept}</span>
+                  ${canDelete ? `<button onclick="deleteTool('${tool.id}', '${tool.name}')" class="text-slate-500 hover:text-rose-500 text-xs"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                </div>
+                <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${avail ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">${tool.status}</span>
+              </div>
+              <h4 class="font-bold text-base mt-1">${tool.name}</h4>
+              ${!avail ? `
+                <div class="mt-2 bg-slate-900 p-2.5 rounded-lg text-xs space-y-1 text-slate-300">
+                  <div><i class="fa-solid fa-user text-amber-400 mr-1.5"></i><b>${tool.issuedTo}</b></div>
+                  <div><i class="fa-solid fa-location-dot text-amber-400 mr-1.5"></i>Site: ${tool.site} (${tool.time})</div>
+                </div>
+                <button onclick="returnTool('${tool.id}')" class="w-full mt-3 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-xs font-bold">Mark Returned</button>
+              ` : `<button onclick="openToolModal('${tool.id}', '${tool.name}')" class="w-full mt-3 bg-amber-500 hover:bg-amber-400 text-slate-900 py-2 rounded-lg text-xs font-bold">Issue Tool</button>`}
+            </div>`;
+        }).join('');
+    }
+
+    // --- RENDER GATE PASS ---
+    function renderGatePasses() {
+      const container = document.getElementById('gpList');
+      if (!appData.gatePasses || appData.gatePasses.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No Gate Passes generated yet.</p>`;
+        return;
+      }
+      container.innerHTML = appData.gatePasses.map(gp => {
+        const isOut = gp.status === "Out for Repair";
+        return `
+          <div class="bg-slate-800 p-4 rounded-xl border ${isOut ? 'border-amber-500/60' : 'border-slate-700'} space-y-2">
             <div class="flex justify-between items-center">
-              <div class="flex items-center gap-2">
-                <span class="text-xs text-slate-400 font-mono">${tool.id} • ${tool.dept}</span>
-                ${canDelete ? `<button onclick="deleteTool('${tool.id}', '${tool.name}')" class="text-slate-500 hover:text-rose-500 text-xs px-1"><i class="fa-solid fa-trash-can"></i></button>` : ''}
-              </div>
-              <span class="text-xs px-2.5 py-0.5 rounded-full font-bold ${avail ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}">
-                ${tool.status}
-              </span>
+              <span class="font-mono font-bold text-amber-400 text-sm">${gp.gpNo}</span>
+              <span class="text-[11px] px-2 py-0.5 rounded font-bold ${isOut ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'}">${gp.status}</span>
             </div>
-            <h4 class="font-bold text-base mt-1">${tool.name}</h4>
-            ${!avail ? `
-              <div class="mt-2 bg-slate-900 p-2.5 rounded-lg text-xs space-y-1 text-slate-300">
-                <div><i class="fa-solid fa-user text-amber-400 mr-1.5"></i><b>${tool.issuedTo}</b></div>
-                <div><i class="fa-solid fa-location-dot text-amber-400 mr-1.5"></i>Site: ${tool.site} (${tool.time})</div>
-              </div>
-              <button onclick="returnTool('${tool.id}')" class="w-full mt-3 bg-emerald-600 hover:bg-emerald-500 text-white py-2 rounded-lg text-xs font-bold">
-                <i class="fa-solid fa-rotate-left mr-1"></i> Mark Returned
+            <div class="text-xs text-slate-400">${gp.type} • ${gp.date}</div>
+            <h4 class="font-bold text-sm text-slate-100">${gp.desc} <span class="text-amber-300">(${gp.qty})</span></h4>
+            <div class="bg-slate-900 p-2 rounded-lg text-xs text-slate-300 space-y-0.5">
+              <div><b>Party:</b> ${gp.party}</div>
+              <div><b>Carrier/Vehicle:</b> ${gp.carrier} • <b>By:</b> ${gp.by}</div>
+            </div>
+            <div class="flex gap-2 pt-1">
+              <button onclick="shareGatePassWhatsApp('${gp.gpNo}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white py-1.5 rounded-lg text-xs font-bold">
+                <i class="fa-brands fa-whatsapp mr-1"></i> Gate Slip
               </button>
-            ` : `
-              <button onclick="openToolModal('${tool.id}', '${tool.name}')" class="w-full mt-3 bg-amber-500 hover:bg-amber-400 text-slate-900 py-2 rounded-lg text-xs font-bold">
-                <i class="fa-solid fa-hand-holding mr-1"></i> Issue Tool
-              </button>
-            `}
+              ${isOut ? `<button onclick="returnGatePass('${gp.gpNo}')" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white py-1.5 rounded-lg text-xs font-bold">Mark Returned</button>` : ''}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    // --- RENDER UTILITY LOGS (DG / BOILER) ---
+    function renderUtilityLogs() {
+      const container = document.getElementById('utilList');
+      if (!appData.utilityLogs || appData.utilityLogs.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No DG/Boiler readings logged yet.</p>`;
+        return;
+      }
+      container.innerHTML = appData.utilityLogs.map(u => `
+        <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-amber-400 text-sm"><i class="fa-solid fa-bolt mr-1"></i>${u.equip}</span>
+            <span class="text-[11px] text-slate-400">${u.time}</span>
           </div>
-        `;
-      });
+          <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-lg text-center">
+            <div><span class="text-[10px] text-slate-400 block">Run Hours</span><b class="text-sm text-emerald-400">${u.hours} Hrs</b></div>
+            <div><span class="text-[10px] text-slate-400 block">Fuel Used</span><b class="text-sm text-amber-400">${u.diesel} Ltr</b></div>
+            <div><span class="text-[10px] text-slate-400 block">Average</span><b class="text-sm text-sky-400">${u.avg} L/Hr</b></div>
+          </div>
+          <div class="flex justify-between items-center text-[11px] text-slate-400">
+            <span>HMR: ${u.start} → ${u.stop} • Op: ${u.operator}</span>
+            <button onclick="shareUtilityWhatsApp('${u.id}')" class="text-green-400 hover:text-green-300 font-bold"><i class="fa-brands fa-whatsapp"></i> Share</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     function renderLogs() {
-      const container = document.getElementById('logList');
-      container.innerHTML = appData.recentLogs.map(l => `
+      document.getElementById('logList').innerHTML = appData.recentLogs.map(l => `
         <div class="bg-slate-900 p-2.5 rounded-lg flex justify-between items-center border border-slate-700/50">
           <div>
             <span class="font-bold ${l.action === 'ISSUE' ? 'text-rose-400' : 'text-emerald-400'}">[${l.action}]</span>
@@ -451,14 +504,12 @@
             <div class="text-slate-400 text-[11px]">To: ${l.staff} • Site/Tkt: ${l.ticket}</div>
           </div>
           <span class="text-[10px] text-slate-500">${l.time}</span>
-        </div>
-      `).join('');
+        </div>`).join('');
     }
 
     function renderAdmins() {
       const isSuperAdmin = currentUser.role === "Super Admin";
-      const container = document.getElementById('adminList');
-      container.innerHTML = appData.users.map(u => `
+      document.getElementById('adminList').innerHTML = appData.users.map(u => `
         <div class="bg-slate-800 p-4 rounded-xl border ${u.role === 'Super Admin' ? 'border-amber-500/60' : 'border-slate-700'} flex justify-between items-center gap-2">
           <div>
             <div class="flex items-center gap-2">
@@ -469,85 +520,128 @@
             ${isSuperAdmin ? `<div class="text-[11px] text-emerald-400 font-mono mt-0.5">PIN: ${u.pin}</div>` : ''}
           </div>
           <div class="flex items-center gap-1.5">
-            ${isSuperAdmin ? `
-              <button onclick="sendAdminCredentialsWhatsApp('${u.id}')" title="Send Login ID & PIN on WhatsApp" class="bg-green-600 hover:bg-green-500 text-white px-2.5 py-2 rounded-lg text-xs font-bold flex items-center gap-1">
-                <i class="fa-brands fa-whatsapp text-sm"></i> <span class="hidden sm:inline">Send Login</span>
-              </button>
-            ` : ''}
-            ${(isSuperAdmin && u.id !== "J-5383") ? `
-              <button onclick="deleteAdmin('${u.id}', '${u.name}')" title="Remove Admin" class="bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white p-2 rounded-lg text-xs">
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
-            ` : `<span class="text-[10px] text-amber-400 font-bold uppercase px-1">${u.role === 'Super Admin' ? 'OWNER' : ''}</span>`}
+            ${isSuperAdmin ? `<button onclick="sendAdminCredentialsWhatsApp('${u.id}')" class="bg-green-600 hover:bg-green-500 text-white px-2.5 py-2 rounded-lg text-xs font-bold"><i class="fa-brands fa-whatsapp"></i></button>` : ''}
+            ${(isSuperAdmin && u.id !== "J-5383") ? `<button onclick="deleteAdmin('${u.id}', '${u.name}')" class="bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white p-2 rounded-lg text-xs"><i class="fa-solid fa-trash-can"></i></button>` : `<span class="text-[10px] text-amber-400 font-bold uppercase">${u.role === 'Super Admin' ? 'OWNER' : ''}</span>`}
           </div>
-        </div>
-      `).join('');
+        </div>`).join('');
     }
 
-    // SEND ADMIN CREDENTIALS DIRECTLY ON WHATSAPP
+    // --- SUBMIT HANDLERS ---
+    async function submitGatePass() {
+      const desc = document.getElementById('gpDesc').value.trim();
+      if (!desc) return alert("Material description is required!");
+      const payload = {
+        type: "ADD_GATEPASS",
+        passType: document.getElementById('gpType').value,
+        desc,
+        qty: document.getElementById('gpQty').value || "1 No",
+        party: document.getElementById('gpParty').value || "External Vendor",
+        carrier: document.getElementById('gpCarrier').value || "Staff",
+        createdBy: `${currentUser.name} (${currentUser.id})`
+      };
+      closeModal('gpModal');
+      document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      const result = await res.json();
+      await loadData();
+      if (confirm(`Gate Pass ${result.gpNo} Generated! Share slip on WhatsApp for Security Gate?`)) {
+        shareGatePassWhatsApp(result.gpNo);
+      }
+    }
+
+    async function returnGatePass(gpNo) {
+      if (!confirm(`Confirm material for ${gpNo} received back in campus?`)) return;
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "RETURN_GATEPASS", gpNo }) });
+      loadData();
+    }
+
+    async function submitUtilityLog() {
+      const start = document.getElementById('utilStart').value;
+      const stop = document.getElementById('utilStop').value;
+      if (!start || !stop) return alert("Enter Start & Stop readings!");
+      const payload = {
+        type: "ADD_UTILITY_LOG",
+        equip: document.getElementById('utilEquip').value,
+        start, stop,
+        diesel: document.getElementById('utilDiesel').value || 0,
+        operator: currentUser.name,
+        remarks: document.getElementById('utilRemarks').value
+      };
+      closeModal('utilModal');
+      document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+      const result = await res.json();
+      alert(`Saved! Total Run: ${result.runHrs} Hrs | Avg: ${result.avg} Ltr/Hr`);
+      loadData();
+    }
+
+    // --- WHATSAPP SHARE FUNCTIONS ---
+    function shareGatePassWhatsApp(gpNo) {
+      const gp = appData.gatePasses.find(g => g.gpNo === gpNo);
+      if (!gp) return;
+      const msg = `🚚 *CGC MAINTENANCE - DIGITAL GATE PASS*\n` +
+                  `--------------------------\n` +
+                  `🎫 *GP No:* ${gp.gpNo}\n` +
+                  `📋 *Type:* ${gp.type}\n` +
+                  `📦 *Material:* ${gp.desc} (${gp.qty})\n` +
+                  `🏭 *Party/Vendor:* ${gp.party}\n` +
+                  `🚛 *Carrier/Vehicle:* ${gp.carrier}\n` +
+                  `📌 *Status:* ${gp.status}\n` +
+                  `✍️ *Authorized By:* ${gp.by}\n` +
+                  `--------------------------`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function shareUtilityWhatsApp(logId) {
+      const u = appData.utilityLogs.find(x => x.id === logId);
+      if (!u) return;
+      const msg = `⚡ *CGC UTILITY LOG - ${u.equip.toUpperCase()}*\n` +
+                  `📅 Date: ${u.time}\n` +
+                  `⏱️ HMR: ${u.start} to ${u.stop} (*${u.hours} Hrs*)\n` +
+                  `⛽ Fuel Used: *${u.diesel} Ltr* (Avg: ${u.avg} Ltr/Hr)\n` +
+                  `👷 Operator: ${u.operator}\n` +
+                  `📝 Remarks: ${u.remarks}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
     function sendAdminCredentialsWhatsApp(userId) {
       const u = appData.users.find(user => user.id === userId);
       if (!u) return;
-
       const portalUrl = window.location.href.split('?')[0];
-      const msg = `🔐 *CGC MAINTENANCE ERP - LOGIN ACCESS*\n` +
-                  `--------------------------\n` +
-                  `Hello *${u.name}*,\n` +
-                  `Aapko CGC Maintenance Portal par *${u.role}* (${u.dept}) ki access di gayi hai.\n\n` +
-                  `🆔 *Employee ID:* ${u.id}\n` +
-                  `🔑 *Security PIN:* ${u.pin}\n` +
-                  `🌐 *Portal Link:* ${portalUrl}\n` +
-                  `--------------------------\n` +
-                  `Note: Login karne ke baad upar 'PIN' button se apna PIN change kar sakte hain.\n` +
-                  `- *Sandeep Singh (Super Admin)*`;
-
+      const msg = `🔐 *CGC MAINTENANCE ERP - LOGIN ACCESS*\n--------------------------\nHello *${u.name}*,\nRole: *${u.role}* (${u.dept})\n🆔 *ID:* ${u.id}\n🔑 *PIN:* ${u.pin}\n🌐 *Link:* ${portalUrl}\n--------------------------\n- *Sandeep Singh (Super Admin)*`;
       const cleanPhone = u.phone ? u.phone.replace(/\D/g, '') : '';
       const waTarget = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
-      const waUrl = waTarget ? `https://wa.me/${waTarget}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
-      
-      window.open(waUrl, '_blank');
+      window.open(waTarget ? `https://wa.me/${waTarget}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
-    // OTHER WHATSAPP INTEGRATION FUNCTIONS
     function shareLowStockWhatsApp() {
       const lowItems = appData.inventory.filter(i => i.stock <= i.min);
       if (lowItems.length === 0) return alert("All store items are in sufficient stock!");
-
-      let text = `⚠️ *CGC MAINTENANCE STORE - LOW STOCK PURCHASE LIST*\nDate: ${new Date().toLocaleDateString('en-IN')}\n--------------------------\n`;
-      lowItems.forEach((item, idx) => {
-        text += `${idx + 1}. *${item.name}* (${item.category})\n   Current: ${item.stock} ${item.unit} | Min Req: ${item.min} ${item.unit}\n`;
-      });
-      text += `--------------------------\nSent by: ${currentUser.name} (${currentUser.role})`;
+      let text = `⚠️ *CGC STORE - LOW STOCK PURCHASE LIST*\n--------------------------\n`;
+      lowItems.forEach((item, idx) => text += `${idx + 1}. *${item.name}* - Left: ${item.stock} ${item.unit} (Min: ${item.min})\n`);
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     function shareIssuedToolsWhatsApp() {
       const outTools = appData.tools.filter(t => t.status !== "Available");
-      if (outTools.length === 0) return alert("All power tools are currently inside the Tool Crib!");
-
-      let text = `🛠️ *CGC TOOL CRIB - ISSUED TOOLS REPORT*\nDate: ${new Date().toLocaleDateString('en-IN')}\n--------------------------\n`;
-      outTools.forEach((t, idx) => {
-        text += `${idx + 1}. *${t.name}* (${t.id})\n   With: ${t.issuedTo} | Site: ${t.site}\n`;
-      });
-      text += `--------------------------\nPlease return tools before shift end.`;
+      if (outTools.length === 0) return alert("All tools are in Tool Crib!");
+      let text = `🛠️ *CGC TOOL CRIB - ISSUED TOOLS*\n--------------------------\n`;
+      outTools.forEach((t, idx) => text += `${idx + 1}. *${t.name}* -> ${t.issuedTo} (${t.site})\n`);
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     function shareDailyReportWhatsApp() {
       const latest = appData.recentLogs.slice(0, 10);
-      if (latest.length === 0) return alert("No recent transactions!");
-
+      if (latest.length === 0) return alert("No logs!");
       let text = `📋 *CGC MAINTENANCE - RECENT STORE LOGS*\n--------------------------\n`;
-      latest.forEach((l, idx) => {
-        text += `${idx + 1}. [${l.action}] ${l.item} x${l.qty} -> ${l.staff} (${l.ticket})\n`;
-      });
+      latest.forEach((l, idx) => text += `${idx + 1}. [${l.action}] ${l.item} x${l.qty} -> ${l.staff}\n`);
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    // STORE & TOOL ACTIONS
+    // --- OTHER EXISTING FUNCTIONS ---
     function openTxnModal(id, name, action) {
-      document.getElementById('txnItemId').value = id;
-      document.getElementById('txnAction').value = action;
+      document.getElementById('txnItemId').value = id; document.getElementById('txnAction').value = action;
       document.getElementById('txnTitle').innerText = (action === 'ISSUE' ? 'Issue: ' : 'Restock: ') + name;
       document.getElementById('ticketDiv').style.display = action === 'ISSUE' ? 'block' : 'none';
       openModal('txnModal');
@@ -557,145 +651,74 @@
       const qty = document.getElementById('txnQty').value;
       const staff = document.getElementById('txnStaff').value || currentUser.name;
       const ticket = document.getElementById('txnTicket').value || "General";
-      const action = document.getElementById('txnAction').value;
-
-      const payload = {
-        type: "STORE_TXN",
-        itemId: document.getElementById('txnItemId').value,
-        action: action,
-        qty: qty,
-        staffName: `${staff} (By ${currentUser.name})`,
-        ticketNo: ticket
-      };
-      closeModal('txnModal');
-      document.getElementById('loader').classList.remove('hidden');
-
+      const payload = { type: "STORE_TXN", itemId: document.getElementById('txnItemId').value, action: document.getElementById('txnAction').value, qty, staffName: `${staff} (By ${currentUser.name})`, ticketNo: ticket };
+      closeModal('txnModal'); document.getElementById('loader').classList.remove('hidden');
       const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
       const result = await res.json();
-
-      if (result.status === "error") {
-        alert(result.message);
-      } else if (result.lowStock) {
-        const msg = encodeURIComponent(`🚨 *CGC STORE LOW STOCK ALERT*\nItem: *${result.itemName}*\nRemaining: *${result.remaining} ${result.unit}*\nIssued To: ${staff} (${ticket})\nReported By: ${currentUser.name}`);
-        if (confirm(`⚠️ Low Stock Alert (${result.remaining} ${result.unit} left)! Send WhatsApp alert now?`)) {
-          window.open(`https://wa.me/?text=${msg}`, '_blank');
-        }
+      if (result.status === "error") alert(result.message);
+      else if (result.lowStock && confirm(`⚠️ Low Stock Alert (${result.remaining} ${result.unit} left)! Send WhatsApp alert?`)) {
+        window.open(`https://wa.me/?text=${encodeURIComponent(`🚨 *CGC LOW STOCK ALERT*\nItem: *${result.itemName}*\nRemaining: *${result.remaining} ${result.unit}*`)}`, '_blank');
       }
       loadData();
     }
 
     async function submitNewItem() {
-      const name = document.getElementById('newItemName').value.trim();
-      if (!name) return alert("Enter item name");
-      closeModal('addItemModal');
-      document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          type: "ADD_ITEM",
-          name,
-          category: document.getElementById('newItemCat').value,
-          unit: document.getElementById('newItemUnit').value || "Pcs",
-          stock: document.getElementById('newItemStock').value || 0,
-          min: document.getElementById('newItemMin').value || 2
-        })
-      });
-      document.getElementById('newItemName').value = "";
+      const name = document.getElementById('newItemName').value.trim(); if (!name) return alert("Enter item name");
+      closeModal('addItemModal'); document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_ITEM", name, category: document.getElementById('newItemCat').value, unit: document.getElementById('newItemUnit').value || "Pcs", stock: document.getElementById('newItemStock').value || 0, min: document.getElementById('newItemMin').value || 2 }) });
       loadData();
     }
 
     async function deleteStoreItem(id, name) {
-      if (!confirm(`Delete "${name}" permanently from Store?`)) return;
+      if (!confirm(`Delete "${name}"?`)) return;
       document.getElementById('loader').classList.remove('hidden');
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_ITEM", itemId: id }) });
       loadData();
     }
 
     async function submitNewTool() {
-      const name = document.getElementById('newToolName').value.trim();
-      if (!name) return alert("Enter tool name");
-      closeModal('addToolModal');
-      document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ type: "ADD_TOOL", name, dept: document.getElementById('newToolDept').value })
-      });
-      document.getElementById('newToolName').value = "";
+      const name = document.getElementById('newToolName').value.trim(); if (!name) return alert("Enter tool name");
+      closeModal('addToolModal'); document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_TOOL", name, dept: document.getElementById('newToolDept').value }) });
       loadData();
     }
 
     async function deleteTool(id, name) {
-      if (!confirm(`Delete "${name}" from Tool Crib?`)) return;
+      if (!confirm(`Delete "${name}"?`)) return;
       document.getElementById('loader').classList.remove('hidden');
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_TOOL", toolId: id }) });
       loadData();
     }
 
-    function openToolModal(id, name) {
-      document.getElementById('selectedToolId').value = id;
-      document.getElementById('toolModalTitle').innerText = "Issue: " + name;
-      openModal('toolModal');
-    }
+    function openToolModal(id, name) { document.getElementById('selectedToolId').value = id; document.getElementById('toolModalTitle').innerText = "Issue: " + name; openModal('toolModal'); }
 
     async function submitToolCheckout() {
-      closeModal('toolModal');
-      document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          type: "TOOL_UPDATE",
-          action: "CHECKOUT",
-          toolId: document.getElementById('selectedToolId').value,
-          staffName: document.getElementById('toolStaff').value || "Technician",
-          site: document.getElementById('toolSite').value || "Campus Site"
-        })
-      });
+      closeModal('toolModal'); document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "TOOL_UPDATE", action: "CHECKOUT", toolId: document.getElementById('selectedToolId').value, staffName: document.getElementById('toolStaff').value || "Technician", site: document.getElementById('toolSite').value || "Site" }) });
       loadData();
     }
 
     async function returnTool(id) {
-      if (!confirm("Confirm tool returned in good condition?")) return;
+      if (!confirm("Confirm tool returned?")) return;
       document.getElementById('loader').classList.remove('hidden');
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "TOOL_UPDATE", action: "RETURN", toolId: id }) });
       loadData();
     }
 
-    // ADMIN & PIN ACTIONS
     async function submitNewAdmin() {
       const userId = document.getElementById('newAdminId').value.trim().toUpperCase();
       const name = document.getElementById('newAdminName').value.trim();
       const pin = document.getElementById('newAdminPin').value.trim();
-      const phone = document.getElementById('newAdminPhone').value.trim();
-      if (!userId || !name || !pin) return alert("ID, Name, and PIN are required!");
-
-      closeModal('addAdminModal');
-      document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          type: "ADD_USER",
-          userId,
-          name,
-          role: document.getElementById('newAdminRole').value,
-          dept: document.getElementById('newAdminDept').value,
-          phone,
-          pin
-        })
-      });
+      if (!userId || !name || !pin) return alert("ID, Name, and PIN required!");
+      closeModal('addAdminModal'); document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_USER", userId, name, role: document.getElementById('newAdminRole').value, dept: document.getElementById('newAdminDept').value, phone: document.getElementById('newAdminPhone').value.trim(), pin }) });
       const result = await res.json();
-      if (result.status === "error") {
-        alert(result.message);
-        document.getElementById('loader').classList.add('hidden');
-      } else {
-        await loadData();
-        if (confirm(`Admin "${name}" created! Kya abhi WhatsApp par unki Login ID aur PIN bhejna hai?`)) {
-          sendAdminCredentialsWhatsApp(userId);
-        }
-      }
+      if (result.status === "error") { alert(result.message); document.getElementById('loader').classList.add('hidden'); }
+      else { await loadData(); if (confirm(`Created! Send Login ID & PIN on WhatsApp?`)) sendAdminCredentialsWhatsApp(userId); }
     }
 
     async function deleteAdmin(userId, name) {
-      if (!confirm(`Remove "${name} (${userId})" from Admin access?`)) return;
+      if (!confirm(`Remove "${name}"?`)) return;
       document.getElementById('loader').classList.remove('hidden');
       await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "DELETE_USER", userId }) });
       loadData();
@@ -704,21 +727,12 @@
     async function submitPinChange() {
       const oldPin = document.getElementById('oldPinInput').value.trim();
       const newPin = document.getElementById('newPinInput').value.trim();
-      if (!oldPin || newPin.length < 4) return alert("Enter current PIN and at least 4-digit new PIN!");
-
-      closeModal('pinModal');
-      document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ type: "CHANGE_PIN", userId: currentUser.id, oldPin, newPin })
-      });
+      if (!oldPin || newPin.length < 4) return alert("Enter valid PIN!");
+      closeModal('pinModal'); document.getElementById('loader').classList.remove('hidden');
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "CHANGE_PIN", userId: currentUser.id, oldPin, newPin }) });
       const result = await res.json();
-      if (result.status === "error") {
-        alert(result.message);
-      } else {
-        alert("PIN updated successfully! Please login again with new PIN.");
-        logout();
-      }
+      if (result.status === "error") alert(result.message);
+      else { alert("PIN updated! Login again."); logout(); }
       document.getElementById('loader').classList.add('hidden');
     }
 
