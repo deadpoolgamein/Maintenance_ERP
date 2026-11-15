@@ -26,7 +26,7 @@
 
       <div class="space-y-3">
         <div>
-          <label class="text-xs text-slate-400">Employee Code (e.g. j5383, DG-01, mech05)</label>
+          <label class="text-xs text-slate-400">Login ID / Trade Code</label>
           <input type="text" id="loginId" placeholder="Enter Code (with or without -)" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 mt-1 text-sm focus:border-amber-400 focus:outline-none">
         </div>
         <div>
@@ -44,11 +44,19 @@
       </div>
 
       <p id="loginStatus" class="text-xs text-center text-slate-400">Connecting to CGC Database...</p>
+
+      <!-- PERSONAL BRANDING FOOTER (LOGIN) -->
+      <div class="border-t border-slate-700/80 pt-3 text-center">
+        <p class="text-[11px] text-slate-400">System Designed & Managed By</p>
+        <p class="text-xs font-bold text-amber-400 tracking-wide mt-0.5">
+          <i class="fa-solid fa-fire-flame-curved mr-1"></i>Sandeep Singh • Welder
+        </p>
+      </div>
     </div>
   </div>
 
   <!-- MAIN PORTAL -->
-  <div id="mainApp" class="hidden pb-10">
+  <div id="mainApp" class="hidden pb-12">
     <!-- Header + Quick App Switcher -->
     <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 shadow-lg">
       <div class="max-w-5xl mx-auto p-3.5 flex flex-wrap justify-between items-center gap-2">
@@ -138,7 +146,7 @@
               <span>Main Tank Stock</span><i class="fa-solid fa-gas-pump"></i>
             </div>
             <div id="kpiDieselLtr" class="text-xl font-extrabold text-emerald-400 mt-1">0 Ltr</div>
-            <div id="kpiDieselCost" class="text-[10px] text-slate-300 font-semibold mt-0.5">Month Used: 0 L</div>
+            <div id="kpiDieselCost" class="text-[10px] text-slate-300 font-semibold mt-0.5">Month Used: 0 L (₹0)</div>
           </div>
         </div>
       </div>
@@ -230,22 +238,26 @@
         <div id="gpList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
 
-      <!-- 5. DG / BOILER DAILY LOGBOOK + MAIN DIESEL TANK STOCK CARD -->
+      <!-- 5. DG / BOILER DAILY LOGBOOK + MAIN DIESEL TANK STOCK & LIVE RATE CARD -->
       <div id="sec-utility" class="hidden space-y-4">
-        <!-- MAIN DIESEL TANK LIVE STOCK CARD -->
         <div id="dieselTankCard" class="bg-slate-800 border border-slate-700 rounded-2xl p-4 space-y-3 shadow-lg">
           <div class="flex flex-wrap justify-between items-start gap-2">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="bg-amber-500/20 text-amber-400 p-2 rounded-lg text-sm"><i class="fa-solid fa-gas-pump"></i></span>
-                <div>
-                  <h3 class="text-sm sm:text-base font-bold text-slate-100">Main Diesel Tank Stock</h3>
-                  <p id="tankUpdatedText" class="text-[11px] text-slate-400">Auto-deducts on DG entry</p>
-                </div>
+            <div class="flex items-center gap-2.5">
+              <span class="bg-amber-500/20 text-amber-400 p-2.5 rounded-xl text-base"><i class="fa-solid fa-gas-pump"></i></span>
+              <div>
+                <h3 class="text-sm sm:text-base font-bold text-slate-100">Main Diesel Tank Stock</h3>
+                <p id="tankUpdatedText" class="text-[11px] text-slate-400">Auto-deducts on DG entry</p>
               </div>
             </div>
-            <div class="flex items-center gap-2">
-              <button onclick="shareFuelStockWhatsApp()" class="bg-slate-700 hover:bg-slate-600 text-green-400 px-2.5 py-2 rounded-lg text-xs font-bold">
+
+            <!-- LIVE DIESEL RATE DISPLAY + IN-APP EDIT BUTTON -->
+            <div class="flex items-center gap-1.5">
+              <button onclick="openEditRateModal()" title="Click to change Diesel Rate" class="bg-slate-900 hover:bg-slate-950 border border-amber-500/50 px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition shadow">
+                <span class="text-slate-400">Diesel Rate:</span>
+                <b id="liveDieselRateText" class="text-amber-400 font-mono">₹95.50/L</b>
+                <i class="fa-solid fa-pen text-[10px] text-sky-400"></i>
+              </button>
+              <button onclick="shareFuelStockWhatsApp()" title="Share Stock on WhatsApp" class="bg-slate-700 hover:bg-slate-600 text-green-400 px-2.5 py-2 rounded-lg text-xs font-bold">
                 <i class="fa-brands fa-whatsapp"></i>
               </button>
               <button onclick="openModal('refillModal')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-lg text-xs font-bold">
@@ -259,7 +271,10 @@
               <span id="tankCurrentLtr" class="text-3xl font-extrabold text-emerald-400">0</span>
               <span id="tankCapacityText" class="text-xs text-slate-400 font-semibold">/ 1000 Liters</span>
             </div>
-            <span id="tankStatusBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400">LEVEL OK</span>
+            <div class="text-right space-y-1">
+              <span id="tankStatusBadge" class="text-xs px-2.5 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-400 inline-block">LEVEL OK</span>
+              <div id="tankStockValueText" class="text-[11px] text-slate-400 font-mono">Stock Value: ₹0</div>
+            </div>
           </div>
 
           <div class="w-full bg-slate-900 rounded-full h-3.5 overflow-hidden border border-slate-700">
@@ -267,11 +282,10 @@
           </div>
         </div>
 
-        <!-- DG / BOILER METER LOG HEADER -->
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex flex-wrap justify-between items-center gap-2">
           <div>
             <h3 class="text-sm font-bold text-amber-400">DG Set, Boiler & HTP Running Log</h3>
-            <p class="text-xs text-slate-400">Auto-calculates Run Hours, Fuel Average & Tank Stock</p>
+            <p class="text-xs text-slate-400">Auto-calculates Run Hours, Fuel Cost & Tank Stock</p>
           </div>
           <button onclick="openNewUtilityModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3.5 py-2 rounded-lg text-xs font-bold">+ Meter Entry</button>
         </div>
@@ -296,62 +310,74 @@
         <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 flex justify-between items-center">
           <div>
             <h3 class="text-sm font-bold text-amber-400">Department Admins & Trade Staff</h3>
-            <p class="text-xs text-slate-400">Super Admin: Sandeep Singh (J-5383) • Edit Trade, Role or PIN</p>
+            <p class="text-xs text-slate-400">Managed by Sandeep Singh (Welder) • Edit Trade, Role or PIN</p>
           </div>
           <button id="addAdminBtn" onclick="openAddAdminModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 px-3 py-2 rounded-lg text-xs font-bold hidden">+ Add Staff/Admin</button>
         </div>
         <div id="adminList" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
       </div>
+
+      <!-- PERSONAL BRANDING FOOTER (MAIN PORTAL) -->
+      <footer class="pt-6 pb-2 text-center border-t border-slate-800/80">
+        <p class="text-[11px] text-slate-500">
+          CGC Maintenance ERP • Developed & Managed by <span class="text-amber-400 font-bold">Sandeep Singh (Welder)</span>
+        </p>
+      </footer>
     </div>
   </div>
 
-  <!-- MODAL: USER GUIDE / TRAINING FOR NEW EMPLOYEES -->
+  <!-- MODAL: UPDATE DIESEL PRICE (IN-APP) -->
+  <div id="rateModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-xs w-full p-5 space-y-3">
+      <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-indian-rupee-sign mr-1.5"></i>Update Diesel Rate</h3>
+      <p class="text-xs text-slate-400">Aaj ka diesel rate (₹ per Liter) dalein—poore portal mein cost isi rate se calculate hogi:</p>
+      <div>
+        <label class="text-xs text-slate-400">Diesel Price (₹ / Liter)</label>
+        <input type="number" step="0.01" id="newDieselRateInput" placeholder="e.g. 95.50" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-base font-bold text-amber-300 mt-1">
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="closeModal('rateModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold text-sm">Cancel</button>
+        <button onclick="submitDieselRate()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold text-sm">Save Rate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: USER GUIDE -->
   <div id="helpGuideModal" class="fixed inset-0 bg-black/80 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-5 space-y-4">
       <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-        <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-book-open mr-2"></i>CGC ERP User Guide (Aasaan Bhasha Mein)</h3>
+        <h3 class="text-lg font-bold text-amber-400"><i class="fa-solid fa-book-open mr-2"></i>CGC ERP User Guide</h3>
         <button onclick="closeModal('helpGuideModal')" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
       </div>
-
       <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-emerald-400 text-sm mb-1">1. Login Kaise Karein?</div>
-          <p>Apna Employee Code small ya capital mein dalein (bina dash ke bhi chalega, jaise <code class="text-amber-300">dg01</code> ya <code class="text-amber-300">DG-01</code>) aur 4-digit PIN daalkar login karein. Upar <b>Key (🔑)</b> icon se apna PIN kabhi bhi badal sakte hain.</p>
+          <div class="font-bold text-emerald-400 text-sm mb-1">1. Easy Login</div>
+          <p>Apna Login Code small ya capital mein dalein (bina dash ke bhi chalega, jaise <code class="text-amber-300">dg01</code> ya <code class="text-amber-300">DG-01</code>) aur PIN daalkar login karein.</p>
         </div>
-
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-amber-400 text-sm mb-1">2. Store Stock (Samaan Issue / Jama)</div>
-          <p>Kisi complaint ke liye samaan lene par item ke neeche <b>"- Issue"</b> dabayein, quantity aur ticket/site likhein. Samaan kam hone par WhatsApp alert button apne aap aayega.</p>
+          <div class="font-bold text-amber-400 text-sm mb-1">2. Store Stock & Tool Crib</div>
+          <p>Samaan lene par <b>"- Issue"</b> aur tool lene par <b>"Issue Tool"</b> dabayein. Kaam khatam hone par tool ko <b>"Mark Returned"</b> karein.</p>
         </div>
-
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-sky-400 text-sm mb-1">3. Tool Crib (Grinder, Drill, Welding Set)</div>
-          <p>Subah tool le jaate waqt <b>"Issue Tool"</b> par click karke apna naam aur site dalein. Kaam khatam hone par <b>"Mark Returned"</b> zaroor dabayein.</p>
+          <div class="font-bold text-rose-400 text-sm mb-1">3. DG Room / Diesel Rate & Meter Entry</div>
+          <p>Tank card par <b>"Diesel Rate: ₹XX/L"</b> par click karke diesel ka price kabhi bhi badal sakte hain. <b>"+ Meter Entry"</b> mein reading dalte hi run hours, fuel cost (₹), aur remaining tank stock auto-update ho jayega.</p>
         </div>
-
         <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-rose-400 text-sm mb-1">4. DG Room / Boiler Meter Entry</div>
-          <p><b>"+ Meter Entry"</b> mein Start HMR aur Stop HMR reading dalein. Run hours, average (Ltr/Hr), aur Main Diesel Tank ka bacha hua stock system khud calculate kar lega. Galti hone par entry ko <b>Edit</b> ya <b>Delete</b> bhi kar sakte hain.</p>
-        </div>
-
-        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700">
-          <div class="font-bold text-purple-400 text-sm mb-1">5. Machine QR Scan & Gate Pass</div>
-          <p>Machine par lage QR sticker ko phone camera se scan karte hi uski service sheet khul jayegi. Campus se bahar repair ke liye motor bhejne par <b>Gate Pass</b> banayein aur WhatsApp par gate slip share karein.</p>
+          <div class="font-bold text-purple-400 text-sm mb-1">4. Machine QR & Gate Pass</div>
+          <p>Machine par lage QR code ko scan karke servicing log karein. Campus se bahar repair ke liye motor bhejne par <b>Gate Pass</b> banayein.</p>
         </div>
       </div>
-
       <button onclick="closeModal('helpGuideModal')" class="w-full bg-amber-500 text-slate-900 font-bold py-2.5 rounded-xl text-sm">Samajh Aa Gaya (Close)</button>
     </div>
   </div>
 
-  <!-- MODAL: ADD OR EDIT STAFF / ADMIN (SUPER ADMIN) -->
+  <!-- MODAL: ADD OR EDIT STAFF / ADMIN -->
   <div id="userFormModal" class="fixed inset-0 bg-black/75 hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-3">
       <h3 id="userFormTitle" class="text-lg font-bold text-amber-400">Add Trade Staff / Incharge</h3>
       <input type="hidden" id="editOldUserId">
-      
       <div>
-        <label class="text-xs text-slate-400">1. Select Trade / Department (Changes Portal View)</label>
+        <label class="text-xs text-slate-400">1. Select Trade / Department</label>
         <select id="formUserDept" onchange="autoPrefixEmpCode()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
           <option value="All">All Trades (Full ERP Access)</option>
           <option value="DG_Boiler">DG Room / Boiler / HTP (DG-)</option>
@@ -364,10 +390,9 @@
           <option value="Gate">Security / Gate Pass Only (GATE-)</option>
         </select>
       </div>
-
       <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="text-xs text-slate-400">2. Employee Code</label>
+          <label class="text-xs text-slate-400">2. Login Code</label>
           <input type="text" id="formUserId" placeholder="e.g. DG-01" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm uppercase mt-1 font-mono text-amber-300">
         </div>
         <div>
@@ -380,14 +405,11 @@
           </select>
         </div>
       </div>
-
       <input type="text" id="formUserName" placeholder="Full Name" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
-      
       <div class="grid grid-cols-2 gap-2">
         <input type="tel" id="formUserPhone" placeholder="WhatsApp (10 digit)" maxlength="10" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
         <input type="text" id="formUserPin" placeholder="Security PIN" maxlength="6" class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
       </div>
-
       <div class="flex gap-2 pt-2">
         <button onclick="closeModal('userFormModal')" class="w-1/2 bg-slate-700 py-2.5 rounded-lg font-semibold">Cancel</button>
         <button onclick="submitUserForm()" class="w-1/2 bg-amber-500 text-slate-900 py-2.5 rounded-lg font-bold">Save Details</button>
@@ -418,7 +440,7 @@
         </div>
       </div>
       <div>
-        <label class="text-[11px] text-slate-400">Diesel Used (Liters - Auto-adjusts Tank Stock)</label>
+        <label class="text-[11px] text-slate-400">Diesel Used (Liters)</label>
         <input type="number" step="0.1" id="utilDiesel" placeholder="e.g. 45" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm mt-1">
       </div>
       <input type="text" id="utilRemarks" placeholder="Remarks" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-sm">
@@ -552,8 +574,9 @@
     // CONFIGURATION: APNE URLS YAHAN SET KAREIN
     // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyymAuOhEDEo0zKVz6PTL-6M4ARtXQReoyBxsWWQiC6lOhNdd-05QtICrttXLT7iSpO/exec";
-    const ATTENDANCE_APP_URL = "https://deadpoolgamein.github.io/workforce-attendance/";
+    const ATTENDANCE_APP_URL = "YOUR_ATTENDANCE_SYSTEM_GITHUB_URL_HERE";
     const INTIMATION_APP_URL = "YOUR_INTIMATION_SLIP_GITHUB_URL_HERE";
+    const BRAND_SIGNATURE = "Sandeep Singh • Welder";
     // =========================================================================
 
     function openConnectedApp(app) {
@@ -562,13 +585,11 @@
       window.open(target, '_blank');
     }
 
-    // Normalize Employee Code (handles lowercase, uppercase, spaces, with or without '-')
     function normalizeCode(str) {
       return String(str || "").replace(/[^A-Z0-9]/gi, '').toUpperCase();
     }
 
     function autoPrefixEmpCode() {
-      // Only auto-generate prefix when adding NEW user (not when editing)
       if (document.getElementById('editOldUserId').value) return;
       const dept = document.getElementById('formUserDept').value;
       const prefixMap = { "All": "J-", "DG_Boiler": "DG-", "Store": "STR-", "Mechanical": "MECH-", "Electrical": "ELEC-", "Plumbing": "PLMB-", "Carpentry": "CARP-", "Mess": "MESS-", "Gate": "GATE-" };
@@ -624,7 +645,7 @@
       deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; document.getElementById('installAppBtn').classList.add('hidden');
     }
 
-    let appData = { users: [], inventory: [], tools: [], recentLogs: [], gatePasses: [], utilityLogs: [], fuelTank: { current: 0, capacity: 1000, minAlert: 200 }, machines: [] };
+    let appData = { users: [], inventory: [], tools: [], recentLogs: [], gatePasses: [], utilityLogs: [], fuelTank: { current: 0, capacity: 1000, minAlert: 200, rate: 95.50 }, machines: [] };
     let currentUser = null;
     let currentRouting = null;
 
@@ -643,12 +664,11 @@
       }
     }
 
-    // FLEXIBLE LOGIN (Small/Caps, with or without '-')
     function handleLogin() {
       const inputNorm = normalizeCode(document.getElementById('loginId').value);
       const pin = document.getElementById('loginPin').value.trim();
       const user = appData.users.find(u => normalizeCode(u.id) === inputNorm && String(u.pin) === pin);
-      if (!user) return alert("Invalid Employee Code or PIN!");
+      if (!user) return alert("Invalid Login Code or PIN!");
       localStorage.setItem('cgc_erp_user', user.id);
       enterPortal(user);
     }
@@ -659,7 +679,8 @@
 
       document.getElementById('loginScreen').classList.add('hidden');
       document.getElementById('mainApp').classList.remove('hidden');
-      document.getElementById('userBadge').innerText = `${user.name} (${user.id})`;
+      // Display Name & Role cleanly (without showing Emp Code)
+      document.getElementById('userBadge').innerText = user.name;
       document.getElementById('roleBadge').innerText = currentRouting.label;
       document.getElementById('tradePortalBadge').innerHTML = `<i class="fa-solid fa-layer-group mr-1"></i> ${currentRouting.label}`;
 
@@ -708,12 +729,17 @@
       document.getElementById('loader').classList.add('hidden');
     }
 
+    function getDieselRate() {
+      return (appData.fuelTank && appData.fuelTank.rate) ? Number(appData.fuelTank.rate) : 95.50;
+    }
+
     function renderExecutiveSummary() {
       if (!currentRouting || !currentRouting.showExecKPI) return;
       const today = new Date();
       const todayStr = today.toISOString().split('T')[0];
       const currentMonthShort = today.toLocaleString('en-US', { month: 'short' });
       const currentYear = String(today.getFullYear());
+      const rate = getDieselRate();
 
       const lowStockCount = appData.inventory.filter(i => i.stock <= i.min).length;
       const outToolsCount = appData.tools.filter(t => t.status !== "Available").length;
@@ -726,12 +752,13 @@
           monthUsed += Number(u.diesel) || 0;
         }
       });
+      const monthCost = Math.round(monthUsed * rate);
 
       document.getElementById('kpiLowStock').innerText = lowStockCount;
       document.getElementById('kpiOutTools').innerText = outToolsCount;
       document.getElementById('kpiDuePM').innerText = duePmCount;
       document.getElementById('kpiDieselLtr').innerText = `${tank.current} Ltr`;
-      document.getElementById('kpiDieselCost').innerText = `${currentMonthShort} Used: ${monthUsed.toFixed(1)} Ltr`;
+      document.getElementById('kpiDieselCost').innerText = `${currentMonthShort}: ${monthUsed.toFixed(1)}L (₹${monthCost.toLocaleString('en-IN')})`;
     }
 
     function shareHODBriefingWhatsApp() {
@@ -742,17 +769,18 @@
       const duePMs = (appData.machines || []).filter(m => m.nextDate <= todayStr);
       const openGPs = (appData.gatePasses || []).filter(g => g.status === "Out for Repair");
       const tank = appData.fuelTank || { current: 0, capacity: 1000 };
+      const rate = getDieselRate();
 
       const msg = `📊 *CGC MAINTENANCE DEPT - EXECUTIVE SUMMARY*\n` +
                   `📅 Date: ${today.toLocaleDateString('en-IN')}\n` +
                   `==============================\n` +
-                  `⛽ *Main Diesel Tank Stock:* ${tank.current} / ${tank.capacity} Ltr\n` +
+                  `⛽ *Main Diesel Tank:* ${tank.current} / ${tank.capacity} Ltr (@ ₹${rate}/L)\n` +
                   `⚠️ *Low Stock Store Items:* ${lowItems.length} items\n` +
                   `🛠️ *Tools Issued Outside:* ${outTools.length} tools\n` +
                   `🔧 *PM Service Due:* ${duePMs.length} machines\n` +
                   `🚚 *Open Gate Passes (RGP):* ${openGPs.length} pending\n` +
                   `==============================\n` +
-                  `Reported by: *${currentUser.name}* (${currentUser.id})`;
+                  `Managed By: *${BRAND_SIGNATURE}*`;
 
       window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
@@ -775,16 +803,20 @@
       activeBtn.classList.add('bg-amber-500', 'text-slate-900', 'font-bold');
     }
 
-    // --- RENDER MAIN DIESEL TANK & UTILITY LOGS (WITH EDIT / DELETE) ---
+    // --- RENDER MAIN DIESEL TANK, LIVE RATE & UTILITY LOGS ---
     function renderUtilityLogs() {
-      const tank = appData.fuelTank || { current: 0, capacity: 1000, minAlert: 200, updated: "-" };
+      const tank = appData.fuelTank || { current: 0, capacity: 1000, minAlert: 200, updated: "-", rate: 95.50 };
+      const rate = getDieselRate();
       const isLow = tank.current <= tank.minAlert;
       const pct = Math.min(100, Math.max(0, Math.round((tank.current / (tank.capacity || 1000)) * 100)));
+      const stockVal = Math.round(tank.current * rate);
 
+      document.getElementById('liveDieselRateText').innerText = `₹${rate.toFixed(2)}/L`;
       document.getElementById('tankCurrentLtr').innerText = tank.current;
       document.getElementById('tankCurrentLtr').className = `text-3xl font-extrabold ${isLow ? 'text-rose-400' : 'text-emerald-400'}`;
       document.getElementById('tankCapacityText').innerText = `/ ${tank.capacity} Liters (${pct}%)`;
       document.getElementById('tankUpdatedText').innerText = `Updated: ${tank.updated} • Min Reserve: ${tank.minAlert} Ltr`;
+      document.getElementById('tankStockValueText').innerText = `Stock Value: ₹${stockVal.toLocaleString('en-IN')}`;
 
       const badge = document.getElementById('tankStatusBadge');
       const bar = document.getElementById('tankProgressBar');
@@ -812,6 +844,8 @@
       container.innerHTML = appData.utilityLogs.map(u => {
         const isRefill = String(u.diesel).startsWith('+');
         if (isRefill) {
+          const addedVal = Number(String(u.diesel).replace('+', '')) || 0;
+          const refillCost = Math.round(addedVal * rate);
           return `
             <div class="bg-emerald-950/40 p-4 rounded-xl border border-emerald-500/40 space-y-1">
               <div class="flex justify-between items-center">
@@ -821,10 +855,11 @@
                   <button onclick="deleteUtilityLog('${u.id}')" title="Delete Refill Entry" class="text-slate-400 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash-can"></i></button>
                 </div>
               </div>
-              <div class="text-lg font-extrabold text-emerald-300">${u.diesel} Liters Added</div>
+              <div class="text-lg font-extrabold text-emerald-300">${u.diesel} Liters <span class="text-xs font-mono text-emerald-400/80">(~₹${refillCost.toLocaleString('en-IN')})</span></div>
               <div class="text-[11px] text-slate-400">${u.remarks} • By: ${u.operator}</div>
             </div>`;
         }
+        const entryCost = Math.round((Number(u.diesel) || 0) * rate);
         return `
           <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 space-y-2">
             <div class="flex justify-between items-center">
@@ -837,7 +872,7 @@
             </div>
             <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-lg text-center">
               <div><span class="text-[10px] text-slate-400 block">Run Hours</span><b class="text-sm text-emerald-400">${u.hours} Hrs</b></div>
-              <div><span class="text-[10px] text-slate-400 block">Fuel Used</span><b class="text-sm text-rose-400">-${u.diesel} Ltr</b></div>
+              <div><span class="text-[10px] text-slate-400 block">Fuel Used</span><b class="text-sm text-rose-400">-${u.diesel} Ltr</b><span class="text-[9px] text-slate-400 block">₹${entryCost.toLocaleString('en-IN')}</span></div>
               <div><span class="text-[10px] text-slate-400 block">Average</span><b class="text-sm text-sky-400">${u.avg} L/Hr</b></div>
             </div>
             <div class="flex justify-between items-center text-[11px] text-slate-400">
@@ -846,6 +881,23 @@
             </div>
           </div>`;
       }).join('');
+    }
+
+    function openEditRateModal() {
+      document.getElementById('newDieselRateInput').value = getDieselRate();
+      openModal('rateModal');
+    }
+
+    async function submitDieselRate() {
+      const rate = document.getElementById('newDieselRateInput').value;
+      if (!rate || Number(rate) <= 0) return alert("Valid diesel rate dalein!");
+      closeModal('rateModal');
+      document.getElementById('loader').classList.remove('hidden');
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ type: "UPDATE_DIESEL_RATE", rate: Number(rate) })
+      });
+      loadData();
     }
 
     function openNewUtilityModal() {
@@ -883,7 +935,7 @@
         equip: document.getElementById('utilEquip').value,
         start, stop,
         diesel: document.getElementById('utilDiesel').value || 0,
-        operator: `${currentUser.name} (${currentUser.id})`,
+        operator: currentUser.name,
         remarks: document.getElementById('utilRemarks').value
       };
 
@@ -906,7 +958,7 @@
       const liters = document.getElementById('refillLiters').value;
       if (!liters || Number(liters) <= 0) return alert("Enter valid liters!");
       closeModal('refillModal'); document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "REFILL_DIESEL_TANK", liters, billNo: document.getElementById('refillBill').value, operator: `${currentUser.name} (${currentUser.id})` }) });
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "REFILL_DIESEL_TANK", liters, billNo: document.getElementById('refillBill').value, operator: currentUser.name }) });
       const result = await res.json();
       document.getElementById('refillLiters').value = ""; document.getElementById('refillBill').value = "";
       alert(`Tank Refilled! New Stock: ${result.newStock} Liters`);
@@ -915,7 +967,16 @@
 
     function shareFuelStockWhatsApp() {
       const tank = appData.fuelTank || { current: 0, capacity: 1000 };
-      const msg = `⛽ *CGC DG ROOM - DIESEL TANK STOCK REPORT*\n--------------------------\n🛢️ *Remaining Diesel:* ${tank.current} Liters (Capacity: ${tank.capacity} Ltr)\n📅 *Updated:* ${tank.updated}\n👷 *Reported By:* ${currentUser.name} (${currentUser.id})`;
+      const rate = getDieselRate();
+      const msg = `⛽ *CGC DG ROOM - DIESEL TANK STOCK REPORT*\n--------------------------\n🛢️ *Remaining Diesel:* ${tank.current} Liters (Capacity: ${tank.capacity} Ltr)\n💰 *Current Diesel Rate:* ₹${rate}/Ltr\n📅 *Updated:* ${tank.updated}\n👷 *Reported By:* ${currentUser.name}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function shareUtilityWhatsApp(logId) {
+      const u = appData.utilityLogs.find(x => x.id === logId); if (!u) return;
+      const rate = getDieselRate();
+      const cost = Math.round((Number(u.diesel) || 0) * rate);
+      const msg = `⚡ *CGC UTILITY LOG - ${u.equip.toUpperCase()}*\n📅 ${u.time}\n⏱️ HMR: ${u.start} → ${u.stop} (*${u.hours} Hrs*)\n⛽ Fuel: *${u.diesel} Ltr* (~₹${cost} @ ₹${rate}/L)\n📊 Avg: ${u.avg} L/Hr | Op: ${u.operator}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
@@ -927,14 +988,14 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="font-bold text-sm text-slate-100">${u.name}</span>
-              <span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded font-mono text-amber-400">${u.id}</span>
+              ${u.role === 'Super Admin' ? `<span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">Welder • Super Admin</span>` : `<span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded font-mono text-amber-400">${u.id}</span>`}
             </div>
             <div class="text-xs text-slate-400 mt-1">${u.role} • Trade: <b class="text-slate-200">${u.dept}</b> ${u.phone ? '• 📞 ' + u.phone : ''}</div>
             ${isSuperAdmin ? `<div class="text-[11px] text-emerald-400 font-mono mt-0.5">PIN: ${u.pin}</div>` : ''}
           </div>
           <div class="flex items-center gap-1.5">
             ${isSuperAdmin ? `
-              <button onclick="sendAdminCredentialsWhatsApp('${u.id}')" title="Send ID & PIN on WhatsApp" class="bg-green-600 hover:bg-green-500 text-white px-2.5 py-2 rounded-lg text-xs font-bold"><i class="fa-brands fa-whatsapp"></i></button>
+              <button onclick="sendAdminCredentialsWhatsApp('${u.id}')" title="Send Login & PIN on WhatsApp" class="bg-green-600 hover:bg-green-500 text-white px-2.5 py-2 rounded-lg text-xs font-bold"><i class="fa-brands fa-whatsapp"></i></button>
               <button onclick="openEditAdminModal('${u.id}')" title="Edit Staff / Trade" class="bg-sky-600/25 hover:bg-sky-600 text-sky-300 hover:text-white p-2 rounded-lg text-xs"><i class="fa-solid fa-pen-to-square"></i></button>
             ` : ''}
             ${(isSuperAdmin && u.id !== "J-5383") ? `
@@ -961,7 +1022,7 @@
       const u = appData.users.find(x => x.id === userId);
       if (!u) return;
       document.getElementById('editOldUserId').value = u.id;
-      document.getElementById('userFormTitle').innerText = "Edit Staff Details (" + u.id + ")";
+      document.getElementById('userFormTitle').innerText = "Edit Staff Details (" + u.name + ")";
       document.getElementById('formUserDept').value = u.dept || "All";
       document.getElementById('formUserId').value = u.id;
       document.getElementById('formUserId').disabled = (u.id === "J-5383");
@@ -1132,7 +1193,7 @@
 
     async function submitCompletePM() {
       closeModal('completePmModal'); document.getElementById('loader').classList.remove('hidden');
-      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "COMPLETE_PM", machineId: document.getElementById('pmMachineId').value, notes: document.getElementById('pmWorkNotes').value || "Routine Servicing Completed", doneBy: `${currentUser.name} (${currentUser.id})` }) });
+      await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "COMPLETE_PM", machineId: document.getElementById('pmMachineId').value, notes: document.getElementById('pmWorkNotes').value || "Routine Servicing Completed", doneBy: currentUser.name }) });
       window.history.replaceState({}, document.title, window.location.pathname);
       loadData();
     }
@@ -1150,6 +1211,7 @@
       if (due.length === 0) return alert("All machines servicing is up to date!");
       let text = `🔧 *CGC PREVENTIVE MAINTENANCE - DUE LIST*\n--------------------------\n`;
       due.forEach((m, idx) => text += `${idx + 1}. *${m.name}* (${m.location})\n   Due Date: ${m.nextDate} | Task: ${m.notes}\n`);
+      text += `--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
@@ -1196,7 +1258,7 @@
     async function submitGatePass() {
       const desc = document.getElementById('gpDesc').value.trim(); if (!desc) return alert("Description required!");
       closeModal('gpModal'); document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_GATEPASS", passType: document.getElementById('gpType').value, desc, qty: document.getElementById('gpQty').value || "1 No", party: document.getElementById('gpParty').value || "Vendor", carrier: document.getElementById('gpCarrier').value || "Staff", createdBy: `${currentUser.name} (${currentUser.id})` }) });
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "ADD_GATEPASS", passType: document.getElementById('gpType').value, desc, qty: document.getElementById('gpQty').value || "1 No", party: document.getElementById('gpParty').value || "Vendor", carrier: document.getElementById('gpCarrier').value || "Staff", createdBy: currentUser.name }) });
       const result = await res.json();
       await loadData();
       if (confirm(`Gate Pass ${result.gpNo} Generated! Share slip on WhatsApp?`)) shareGatePassWhatsApp(result.gpNo);
@@ -1211,19 +1273,13 @@
 
     function shareGatePassWhatsApp(gpNo) {
       const gp = appData.gatePasses.find(g => g.gpNo === gpNo); if (!gp) return;
-      const msg = `🚚 *CGC MAINTENANCE - DIGITAL GATE PASS*\n🎫 *GP No:* ${gp.gpNo}\n📋 *Type:* ${gp.type}\n📦 *Material:* ${gp.desc} (${gp.qty})\n🏭 *Party:* ${gp.party}\n🚛 *Carrier:* ${gp.carrier}\n📌 *Status:* ${gp.status}\n✍️ *By:* ${gp.by}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function shareUtilityWhatsApp(logId) {
-      const u = appData.utilityLogs.find(x => x.id === logId); if (!u) return;
-      const msg = `⚡ *CGC UTILITY LOG - ${u.equip.toUpperCase()}*\n📅 ${u.time}\n⏱️ HMR: ${u.start} → ${u.stop} (*${u.hours} Hrs*)\n⛽ Fuel: *${u.diesel} Ltr* (Avg: ${u.avg} L/Hr)\n👷 Op: ${u.operator}`;
+      const msg = `🚚 *CGC MAINTENANCE - DIGITAL GATE PASS*\n🎫 *GP No:* ${gp.gpNo}\n📋 *Type:* ${gp.type}\n📦 *Material:* ${gp.desc} (${gp.qty})\n🏭 *Party:* ${gp.party}\n🚛 *Carrier:* ${gp.carrier}\n📌 *Status:* ${gp.status}\n✍️ *Issued By:* ${gp.by}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
     }
 
     function sendAdminCredentialsWhatsApp(userId) {
       const u = appData.users.find(user => user.id === userId); if (!u) return;
-      const msg = `🔐 *CGC MAINTENANCE ERP - TRADE PORTAL ACCESS*\nHello *${u.name}*,\nAssigned Portal: *${u.dept}* (${u.role})\n🆔 *Employee Code:* ${u.id}\n🔑 *Security PIN:* ${u.pin}\n🌐 *Link:* ${window.location.href.split('?')[0]}\n- *Sandeep Singh (Super Admin)*`;
+      const msg = `🔐 *CGC MAINTENANCE ERP - PORTAL ACCESS*\nHello *${u.name}*,\nAssigned Portal: *${u.dept}* (${u.role})\n🆔 *Login Code:* ${u.id}\n🔑 *Security PIN:* ${u.pin}\n🌐 *Link:* ${window.location.href.split('?')[0]}\n--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       const cleanPhone = u.phone ? u.phone.replace(/\D/g, '') : '';
       const waTarget = cleanPhone.length === 10 ? `91${cleanPhone}` : cleanPhone;
       window.open(waTarget ? `https://wa.me/${waTarget}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1234,6 +1290,7 @@
       if (lowItems.length === 0) return alert("All store items are in sufficient stock!");
       let text = `⚠️ *CGC STORE - LOW STOCK LIST*\n--------------------------\n`;
       lowItems.forEach((item, idx) => text += `${idx + 1}. *${item.name}* - Left: ${item.stock} ${item.unit} (Min: ${item.min})\n`);
+      text += `--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
@@ -1242,6 +1299,7 @@
       if (outTools.length === 0) return alert("All tools are in Tool Crib!");
       let text = `🛠️ *CGC TOOL CRIB - ISSUED TOOLS*\n--------------------------\n`;
       outTools.forEach((t, idx) => text += `${idx + 1}. *${t.name}* -> ${t.issuedTo} (${t.site})\n`);
+      text += `--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
@@ -1249,6 +1307,7 @@
       const latest = appData.recentLogs.slice(0, 10); if (latest.length === 0) return alert("No logs!");
       let text = `📋 *CGC MAINTENANCE - RECENT STORE LOGS*\n--------------------------\n`;
       latest.forEach((l, idx) => text += `${idx + 1}. [${l.action}] ${l.item} x${l.qty} -> ${l.staff}\n`);
+      text += `--------------------------\nManaged By: *${BRAND_SIGNATURE}*`;
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
 
@@ -1262,11 +1321,11 @@
     async function submitStoreTxn() {
       const qty = document.getElementById('txnQty').value, staff = document.getElementById('txnStaff').value || currentUser.name, ticket = document.getElementById('txnTicket').value || "General";
       closeModal('txnModal'); document.getElementById('loader').classList.remove('hidden');
-      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "STORE_TXN", itemId: document.getElementById('txnItemId').value, action: document.getElementById('txnAction').value, qty, staffName: `${staff} (By ${currentUser.id})`, ticketNo: ticket }) });
+      const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ type: "STORE_TXN", itemId: document.getElementById('txnItemId').value, action: document.getElementById('txnAction').value, qty, staffName: `${staff} (By ${currentUser.name})`, ticketNo: ticket }) });
       const result = await res.json();
       if (result.status === "error") alert(result.message);
       else if (result.lowStock && confirm(`⚠️ Low Stock Alert (${result.remaining} ${result.unit} left)! Send WhatsApp alert?`)) {
-        window.open(`https://wa.me/?text=${encodeURIComponent(`🚨 *CGC LOW STOCK ALERT*\nItem: *${result.itemName}*\nRemaining: *${result.remaining} ${result.unit}*`)}`, '_blank');
+        window.open(`https://wa.me/?text=${encodeURIComponent(`🚨 *CGC LOW STOCK ALERT*\nItem: *${result.itemName}*\nRemaining: *${result.remaining} ${result.unit}*\nManaged By: *${BRAND_SIGNATURE}*`)}`, '_blank');
       }
       loadData();
     }
